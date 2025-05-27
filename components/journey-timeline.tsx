@@ -198,28 +198,31 @@ export default function JourneyTimeline() {
 
         {/* Timeline */}
         <div className="relative">
-          {/* Timeline Line - Fixed to reach full height */}
+          {/* Timeline Line - Hidden on mobile, visible on desktop */}
           <motion.div
-            className="absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"
+            className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"
             style={{ height: `${timelineEvents.length * 400}px` }}
             initial={{ height: 0 }}
             animate={isInView ? { height: `${timelineEvents.length * 400}px` } : { height: 0 }}
             transition={{ duration: 2, ease: "easeInOut" }}
           />
 
-          {/* Timeline Events - Reduced spacing and card height */}
-          <div className="space-y-28">
+          {/* Timeline Events */}
+          <div className="space-y-8 md:space-y-28">
             {timelineEvents.map((event, index) => (
               <motion.div
                 key={event.year}
-                className={`relative flex items-center ${index % 2 === 0 ? "flex-row" : "flex-row-reverse"}`}
+                className={`relative flex items-center ${
+                  // Mobile: always flex-row, Desktop: alternating
+                  "flex-row md:" + (index % 2 === 0 ? "flex-row" : "flex-row-reverse")
+                }`}
                 initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
                 animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
                 transition={{ duration: 0.8, delay: index * 0.2 }}
               >
-                {/* Timeline Node */}
+                {/* Timeline Node - Hidden on mobile */}
                 <motion.div
-                  className="absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-white shadow-xl flex items-center justify-center z-10"
+                  className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-white shadow-xl items-center justify-center z-10"
                   style={{ backgroundColor: event.color }}
                   whileHover={{ scale: 1.1, rotate: 360 }}
                   transition={{ duration: 0.6 }}
@@ -227,9 +230,12 @@ export default function JourneyTimeline() {
                   <event.icon className="w-8 h-8 text-white" />
                 </motion.div>
 
-                {/* Event Card - Made Much Smaller in Height */}
+                {/* Event Card */}
                 <motion.div
-                  className={`w-5/12 ${index % 2 === 0 ? "mr-auto pr-16" : "ml-auto pl-16"}`}
+                  className={`w-full md:w-5/12 ${
+                    // Mobile: no margin, Desktop: alternating margins
+                    "mx-0 md:" + (index % 2 === 0 ? "mr-auto pr-16" : "ml-auto pl-16")
+                  }`}
                   whileHover={{ scale: 1.02, y: -5 }}
                 >
                   <motion.div

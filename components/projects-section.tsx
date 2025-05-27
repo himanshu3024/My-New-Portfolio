@@ -207,7 +207,7 @@ export default function ProjectsSection() {
               onHoverEnd={() => setHoveredProject(null)}
             >
               <motion.div
-                className="bg-white rounded-3xl p-8 shadow-lg border border-slate-200 hover:shadow-2xl transition-all duration-500 relative overflow-hidden"
+                className="bg-white rounded-3xl p-6 md:p-8 shadow-lg border border-slate-200 hover:shadow-2xl transition-all duration-500 relative overflow-hidden"
                 whileHover={{
                   y: -8,
                   scale: 1.02,
@@ -223,13 +223,14 @@ export default function ProjectsSection() {
                   transition={{ duration: 0.5 }}
                 />
 
-                <div className="grid lg:grid-cols-3 gap-8 items-start relative z-10">
+                {/* Mobile: Vertical Layout, Desktop: Horizontal Layout */}
+                <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6 lg:gap-8 items-start relative z-10">
                   {/* Project Info */}
-                  <div className="lg:col-span-2 space-y-6">
-                    <div className="flex items-start justify-between">
+                  <div className="w-full lg:col-span-2 space-y-4 lg:space-y-6">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                       <div className="flex items-center space-x-4">
                         <motion.div
-                          className="p-4 rounded-2xl relative overflow-hidden"
+                          className="p-3 lg:p-4 rounded-2xl relative overflow-hidden"
                           style={{ backgroundColor: `${project.iconColor}15` }}
                           whileHover={{
                             scale: 1.1,
@@ -242,19 +243,22 @@ export default function ProjectsSection() {
                             style={{ backgroundColor: project.iconColor }}
                             whileHover={{ opacity: 0.1 }}
                           />
-                          <project.icon className="w-8 h-8 relative z-10" style={{ color: project.iconColor }} />
+                          <project.icon
+                            className="w-6 lg:w-8 h-6 lg:h-8 relative z-10"
+                            style={{ color: project.iconColor }}
+                          />
                         </motion.div>
                         <div>
                           <motion.h3
-                            className="text-2xl font-semibold text-slate-900 group-hover:text-blue-600 transition-colors"
+                            className="text-lg lg:text-2xl font-semibold text-slate-900 group-hover:text-blue-600 transition-colors"
                             whileHover={{ x: 5 }}
                           >
                             {project.title}
                           </motion.h3>
-                          <div className="flex items-center space-x-3 mt-2">
+                          <div className="flex flex-wrap items-center gap-2 lg:gap-3 mt-2">
                             <span className="text-slate-500 text-sm">{project.year}</span>
                             <motion.span
-                              className="px-3 py-1 text-xs font-medium rounded-full text-white"
+                              className="px-2 lg:px-3 py-1 text-xs font-medium rounded-full text-white"
                               style={{ backgroundColor: project.statusColor }}
                               whileHover={{ scale: 1.1 }}
                             >
@@ -268,7 +272,7 @@ export default function ProjectsSection() {
                                   animate={{ opacity: 1, scale: 1 }}
                                   transition={{ delay: i * 0.1 + 0.5 }}
                                 >
-                                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                                  <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
                                 </motion.div>
                               ))}
                             </div>
@@ -276,7 +280,7 @@ export default function ProjectsSection() {
                         </div>
                       </div>
 
-                      <div className="flex space-x-3">
+                      <div className="flex space-x-3 self-start">
                         {project.githubUrl && (
                           <FloatingActionButton href={project.githubUrl} icon={Github} label="View Code" color="#333" />
                         )}
@@ -292,7 +296,7 @@ export default function ProjectsSection() {
                     </div>
 
                     <motion.p
-                      className="text-slate-600 leading-relaxed"
+                      className="text-slate-600 leading-relaxed text-sm lg:text-base"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.3 }}
@@ -302,12 +306,12 @@ export default function ProjectsSection() {
 
                     {/* Enhanced Features */}
                     <div>
-                      <h4 className="text-sm font-semibold text-slate-900 mb-4">Key Features</h4>
-                      <div className="grid grid-cols-2 gap-3">
+                      <h4 className="text-sm font-semibold text-slate-900 mb-3 lg:mb-4">Key Features</h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 lg:gap-3">
                         {project.features.map((feature, featureIndex) => (
                           <motion.div
                             key={featureIndex}
-                            className="flex items-center space-x-3 p-3 bg-slate-50 rounded-lg"
+                            className="flex items-center space-x-2 lg:space-x-3 p-2 lg:p-3 bg-slate-50 rounded-lg"
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: featureIndex * 0.1 + 0.5 }}
@@ -317,19 +321,19 @@ export default function ProjectsSection() {
                             }}
                           >
                             <motion.div
-                              className="w-2 h-2 rounded-full"
+                              className="w-1.5 lg:w-2 h-1.5 lg:h-2 rounded-full"
                               style={{ backgroundColor: project.iconColor }}
                               animate={{ scale: [1, 1.2, 1] }}
                               transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
                             />
-                            <span className="text-sm text-slate-600">{feature}</span>
+                            <span className="text-xs lg:text-sm text-slate-600">{feature}</span>
                           </motion.div>
                         ))}
                       </div>
                     </div>
 
                     {/* Enhanced Project Links */}
-                    <div className="flex space-x-6">
+                    <div className="flex flex-col sm:flex-row gap-4 lg:gap-6">
                       {project.liveUrl && (
                         <motion.a
                           href={project.liveUrl}
@@ -362,15 +366,15 @@ export default function ProjectsSection() {
                     </div>
                   </div>
 
-                  {/* Enhanced Technologies */}
-                  <div className="space-y-6">
+                  {/* Enhanced Technologies - Now below content on mobile */}
+                  <div className="w-full lg:w-auto space-y-4 lg:space-y-6">
                     <div>
-                      <h4 className="text-sm font-semibold text-slate-900 mb-4">Technologies Used</h4>
-                      <div className="flex flex-wrap gap-3">
+                      <h4 className="text-sm font-semibold text-slate-900 mb-3 lg:mb-4">Technologies Used</h4>
+                      <div className="flex flex-wrap gap-2 lg:gap-3">
                         {project.technologies.map((tech, techIndex) => (
                           <motion.span
                             key={techIndex}
-                            className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium border transition-all duration-300 relative overflow-hidden"
+                            className="inline-flex items-center space-x-2 px-3 lg:px-4 py-1.5 lg:py-2 rounded-xl text-xs lg:text-sm font-medium border transition-all duration-300 relative overflow-hidden"
                             style={{
                               backgroundColor: `${tech.color}10`,
                               borderColor: `${tech.color}30`,
@@ -401,7 +405,7 @@ export default function ProjectsSection() {
 
                     {/* Project Metrics */}
                     <motion.div
-                      className="p-4 bg-slate-50 rounded-xl"
+                      className="p-3 lg:p-4 bg-slate-50 rounded-xl"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 1 }}

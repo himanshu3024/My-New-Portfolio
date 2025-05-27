@@ -340,10 +340,12 @@ export default function HeroSection() {
         }}
       />
 
-      {/* Enhanced Floating Tech Icons */}
-      {techIcons.map((tech, index) => (
-        <TechIcon key={index} {...tech} />
-      ))}
+      {/* Enhanced Floating Tech Icons - Hidden on mobile */}
+      <div className="hidden md:block">
+        {techIcons.map((tech, index) => (
+          <TechIcon key={index} {...tech} />
+        ))}
+      </div>
 
       {/* Floating Geometric Elements */}
       <motion.div
@@ -376,7 +378,7 @@ export default function HeroSection() {
 
       {/* Main Content */}
       <motion.div
-        className="relative z-10 text-center px-6 max-w-5xl mx-auto"
+        className="relative z-10 text-center px-6 max-w-5xl mx-auto mt-8 md:mt-0"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
