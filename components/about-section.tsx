@@ -153,8 +153,8 @@ export default function AboutSection() {
 
   const experience = [
     {
-      title: "Cloud Computing Technologies",
-      company: "George Brown College",
+      title: "Cloud Computing Technologies Post Graduate Certificate",
+      company: "George Brown College, Toronto",
       period: "May 2025 - Ongoing",
       type: "Education",
       icon: GraduationCap,
@@ -162,20 +162,20 @@ export default function AboutSection() {
       description: "Postgraduate program focusing on cloud infrastructure, security, and modern DevOps practices.",
     },
     {
-      title: "Project Management Program",
-      company: "Fleming College",
-      period: "Sep 2023 - Apr 2024",
+      title: "Project Management Post Graduate Certificate",
+      company: "Fleming College, Toronto",
+      period: "Apr 2024 - Dec 2024",
       type: "Education",
       icon: GraduationCap,
       color: "#8B5CF6",
-      description: "Comprehensive project management training including Agile, Scrum, and stakeholder management.",
+      description: "Studied core concepts in Physics, Chemistry, and Mathematics with a strong emphasis on analytical and problem-solving skills.",
     },
     {
-      title: "IT Support Assistant",
-      company: "Rajasthan Computer Academy",
-      period: "Jul 2016 – Dec 2018",
-      type: "Work",
-      icon: Briefcase,
+      title: "Bachelors in Science",
+      company: "University of Rajasthan",
+      period: "Jul 2015 – Aug 2019",
+      type: "Education",
+      icon: GraduationCap,
       color: "#10B981",
       description: "Provided technical support, system configuration, and infrastructure maintenance.",
     },
@@ -344,7 +344,7 @@ export default function AboutSection() {
               transition={{ duration: 0.8, delay: 0.6 }}
             >
               {[
-                { label: "Years in IT", value: "5+", icon: TrendingUp, color: "#3B82F6" },
+                { label: "Years in IT", value: "3+", icon: TrendingUp, color: "#3B82F6" },
                 { label: "Certifications", value: "8+", icon: Award, color: "#10B981" },
                 { label: "Major Projects", value: "3", icon: Briefcase, color: "#F59E0B" },
                 { label: "Cloud Platforms", value: "2", icon: GraduationCap, color: "#8B5CF6" },

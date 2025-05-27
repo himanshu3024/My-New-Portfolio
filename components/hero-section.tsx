@@ -430,7 +430,7 @@ export default function HeroSection() {
           >
             <TypewriterText
               text="Cloud Computing Specialist crafting scalable solutions with AWS & Azure"
-              delay={1500}
+              delay={500}
             />
           </motion.div>
 

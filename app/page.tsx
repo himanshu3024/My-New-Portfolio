@@ -128,7 +128,7 @@ export default function Portfolio() {
             <p className="text-slate-400 text-sm">© 2024 Himanshu Gandhi. All rights reserved.</p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <a
-                href="https://github.com/himanshu"
+                href="https://github.com/himanshu3024"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-slate-400 hover:text-white transition-colors"
@@ -136,7 +136,7 @@ export default function Portfolio() {
                 GitHub
               </a>
               <a
-                href="https://linkedin.com/in/himanshu-gandhi"
+                href="https://www.linkedin.com/in/himanshu-gandhi-891204160/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-slate-400 hover:text-white transition-colors"
