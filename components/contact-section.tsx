@@ -42,13 +42,13 @@ export default function ContactSection() {
     {
       icon: Linkedin,
       label: "LinkedIn",
-      url: "https://linkedin.com/in/himanshu-gandhi",
+      url: "https://www.linkedin.com/in/himanshu-gandhi-891204160/",
       username: "@himanshu-gandhi",
     },
     {
       icon: Github,
       label: "GitHub",
-      url: "https://github.com/himanshu",
+      url: "https://github.com/himanshu3024",
       username: "@himanshu",
     },
     {
@@ -335,7 +335,7 @@ export default function ContactSection() {
                 Email Me Directly
               </motion.a>
               <motion.a
-                href="https://linkedin.com/in/himanshu-gandhi"
+                href="https://www.linkedin.com/in/himanshu-gandhi-891204160/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-3 border-2 border-slate-300 text-slate-700 font-medium rounded-full hover:border-slate-900 hover:text-slate-900 transition-all duration-300"

@@ -544,9 +544,9 @@ export default function HeroSection() {
         {/* Enhanced Quick Links */}
         <motion.div variants={slideInUp} className="flex justify-center space-x-10 mt-16">
           {[
-            { name: "GitHub", url: "https://github.com/himanshu" },
-            { name: "LinkedIn", url: "https://linkedin.com/in/himanshu" },
-            { name: "Portfolio", url: "#", icon: ExternalLink },
+            { name: "GitHub", url: "https://github.com/himanshu3024" },
+            { name: "LinkedIn", url: "https://www.linkedin.com/in/himanshu-gandhi-891204160/" },
+            { name: "Portfolio", url: "https://yellow-forest-08fad6510.6.azurestaticapps.net/", icon: ExternalLink },
           ].map((link, index) => (
             <motion.a
               key={link.name}
