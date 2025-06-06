@@ -27,16 +27,9 @@ const MagneticButton = ({ children, className }: { children: React.ReactNode; cl
   }
 
   return (
-    <motion.div
-      ref={ref}
-      style={{ x, y }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className={className}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-    >
+    <div ref={ref} className={className}>
       {children}
-    </motion.div>
+    </div>
   )
 }
 
@@ -280,7 +273,7 @@ export default function AboutSection() {
             className="space-y-12"
           >
             <motion.div>
-              <h3 className="text-2xl font-semibold text-slate-900 mb-8">Experience & Education</h3>
+              <h3 className="text-2xl font-semibold text-slate-900 mb-8">Education</h3>
 
               <div className="space-y-8">
                 {experience.map((exp, index) => (

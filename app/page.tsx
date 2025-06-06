@@ -31,7 +31,7 @@ export default function Portfolio() {
         const element = document.querySelector(target.hash)
         if (element) {
           element.scrollIntoView({
-            behavior: "smooth",
+            behavior: "auto", // Change from "smooth" to "auto" for faster scrolling
             block: "start",
           })
         }
@@ -78,7 +78,10 @@ export default function Portfolio() {
       {/* Scroll Progress Indicator */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 z-50 origin-left"
-        style={{ scaleX }}
+        style={{ 
+          scaleX,
+          transition: 'transform 0.01s linear' // Add this for smoother scrolling
+        }}
       />
 
       {/* Footer */}
@@ -87,9 +90,7 @@ export default function Portfolio() {
           <div className="grid md:grid-cols-3 gap-8 mb-8">
             <div>
               <h3 className="text-xl font-semibold mb-4">Himanshu Gandhi</h3>
-              <p className="text-slate-400 leading-relaxed">
-                Cloud Computing Specialist passionate about building scalable solutions with modern technologies.
-              </p>
+              <TypedText text="Cloud Computing Student passionate about building scalable solutions with modern technologies." />
             </div>
             <div>
               <h4 className="font-semibold mb-4">Quick Links</h4>
@@ -148,5 +149,33 @@ export default function Portfolio() {
         </div>
       </footer>
     </motion.div>
+  )
+}
+
+
+
+export function TypedText({ text }: { text: string }) {
+  return (
+    <motion.p 
+      className="text-slate-400 leading-relaxed"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.1 }} // Slightly faster container fade-in
+    >
+      {text.split("").map((char, index) => (
+        <motion.span
+          key={index}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{
+            duration: 0.005, // Extremely fast character appearance
+            delay: index * 0.005, // Much shorter delay between characters
+            ease: "linear"
+          }}
+        >
+          {char}
+        </motion.span>
+      ))}
+    </motion.p>
   )
 }

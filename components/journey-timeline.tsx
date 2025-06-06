@@ -59,16 +59,16 @@ export default function JourneyTimeline() {
     },
     {
       year: 2022,
-      title: "Data Analytics & Cybersecurity",
-      subtitle: "Google Career Certificates",
-      type: "certification",
-      icon: Award,
+      title: "Customer Service Representative",
+      subtitle: "ETS. Africainde",
+      type: "work",
+      icon: Briefcase,
       color: "#F59E0B",
-      location: "Remote Learning",
+      location: "Pointe-Noire, Rep. of Congo",
       description:
-        "Earned multiple professional certificates in Data Analytics and Cybersecurity, building foundation for cloud security expertise.",
-      achievements: ["Google Data Analytics Certificate", "Google Cybersecurity Certificate", "SQL Proficiency"],
-      technologies: ["Python", "SQL", "Tableau", "R", "Security Tools"],
+        "Provided customer support by resolving inquiries, assisting with transactions, and ensuring a positive client experience through efficient communication and issue resolution.",
+      achievements: ["Recognized for consistently achieving high customer satisfaction scores through prompt issue resolution and personalized service."],
+      skills: ["Client Relationship Management", "CRM Software Handling", "Communication", "Problem Solving & Troubleshooting", "Process Improvement Awareness"],
       status: "completed",
     },
     {
@@ -210,16 +210,15 @@ export default function JourneyTimeline() {
           {/* Timeline Events */}
           <div className="space-y-8 md:space-y-28">
             {timelineEvents.map((event, index) => (
-              <motion.div
-                key={event.year}
-                className={`relative flex items-center ${
-                  // Mobile: always flex-row, Desktop: alternating
-                  "flex-row md:" + (index % 2 === 0 ? "flex-row" : "flex-row-reverse")
-                }`}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
-                animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
-              >
+                <motion.div
+                  key={event.year}
+                  className={`relative flex items-center flex-col ${
+                    index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                  }`}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
+                  transition={{ duration: 0.8, delay: index * 0.2 }}
+                >
                 {/* Timeline Node - Hidden on mobile */}
                 <motion.div
                   className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-white shadow-xl items-center justify-center z-10"
@@ -293,11 +292,13 @@ export default function JourneyTimeline() {
                       </div>
                     </div>
 
-                    {/* Technologies - Compact */}
+                    {/* Technologies/Skills - Compact */}
                     <div>
-                      <h4 className="text-sm font-semibold text-slate-900 mb-1">Technologies</h4>
+                      <h4 className="text-sm font-semibold text-slate-900 mb-1">
+                        {event.technologies ? 'Technologies' : 'Skills'}
+                      </h4>
                       <div className="flex flex-wrap gap-1">
-                        {event.technologies.slice(0, 4).map((tech, i) => (
+                        {(event.technologies || event.skills)?.slice(0, 4).map((item, i) => (
                           <motion.span
                             key={i}
                             className="px-2 py-0.5 bg-slate-100 text-slate-700 text-xs rounded-full"
@@ -310,19 +311,22 @@ export default function JourneyTimeline() {
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: i * 0.05 + 0.8 }}
                           >
-                            {tech}
+                            {item}
                           </motion.span>
                         ))}
+                        {(event.technologies || event.skills)?.length > 4 && (
+                          <motion.span
+                            className="px-2 py-0.5 bg-slate-100 text-slate-600 text-xs rounded-full"
+                            whileHover={{ scale: 1.05 }}
+                          >
+                            +{(event.technologies || event.skills).length - 4} more
+                          </motion.span>
+                        )}
                       </div>
                     </div>
 
-                    {/* Hover Effect */}
-                    <motion.div
-                      className="absolute inset-0 opacity-0 rounded-2xl"
-                      style={{ backgroundColor: `${event.color}05` }}
-                      whileHover={{ opacity: 1 }}
-                      transition={{ duration: 0.3 }}
-                    />
+                    
+                    
                   </motion.div>
                 </motion.div>
               </motion.div>

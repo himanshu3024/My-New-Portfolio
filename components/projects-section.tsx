@@ -13,30 +13,14 @@ const FloatingActionButton = ({ href, icon: Icon, label, color }: any) => (
     className="group relative p-4 rounded-full shadow-lg overflow-hidden"
     style={{ backgroundColor: `${color}15`, borderColor: `${color}30` }}
     whileHover={{
-      scale: 1.1,
-      y: -5,
+      scale: 1.05, // Reduced scale
+      y: -2, // Reduced lift
       backgroundColor: color,
-      boxShadow: `0 20px 40px ${color}40`,
     }}
-    whileTap={{ scale: 0.9 }}
+    transition={{ duration: 0.2 }} // Faster transition
+    whileTap={{ scale: 0.95 }}
   >
-    <motion.div
-      className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-20"
-      style={{ background: `linear-gradient(45deg, ${color}, transparent)` }}
-      animate={{ rotate: [0, 360] }}
-      transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-    />
     <Icon className="w-6 h-6 relative z-10 group-hover:text-white transition-colors" style={{ color }} />
-
-    {/* Tooltip */}
-    <motion.div
-      className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white px-3 py-1 rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-      initial={{ y: 10, opacity: 0 }}
-      whileHover={{ y: 0, opacity: 1 }}
-    >
-      {label}
-      <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-slate-900" />
-    </motion.div>
   </motion.a>
 )
 
@@ -60,8 +44,8 @@ export default function ProjectsSection() {
       icon: Globe,
       iconColor: "#0078D4",
       features: ["Responsive Design", "CI/CD Pipeline", "Azure Hosting", "Git Version Control"],
-      liveUrl: "#",
-      githubUrl: "#",
+      liveUrl: "https://yellow-forest-08fad6510.6.azurestaticapps.net/",
+      githubUrl: "https://github.com/himanshu3024/My-New-Portfolio",
       status: "Live",
       statusColor: "#10B981",
       year: "2024",
@@ -82,7 +66,7 @@ export default function ProjectsSection() {
       iconColor: "#339933",
       features: ["RESTful APIs", "Database Integration", "Scalable Architecture", "Azure Deployment"],
       liveUrl: "#",
-      githubUrl: "#",
+      githubUrl: "https://github.com/himanshu3024/E-Commerce-Website",
       status: "In Development",
       statusColor: "#F59E0B",
       year: "2024",
@@ -149,22 +133,6 @@ export default function ProjectsSection() {
 
   return (
     <section ref={ref} className="py-24 px-6 bg-slate-50 relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <motion.div
-        className="absolute top-0 left-0 w-full h-full opacity-5"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fillRule='evenodd'%3E%3Cg fill='%233B82F6' fillOpacity='1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}
-        animate={{
-          backgroundPosition: ["0px 0px", "60px 60px"],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Number.POSITIVE_INFINITY,
-          ease: "linear",
-        }}
-      />
-
       <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
           variants={containerVariants}
@@ -207,12 +175,13 @@ export default function ProjectsSection() {
               onHoverEnd={() => setHoveredProject(null)}
             >
               <motion.div
-                className="bg-white rounded-3xl p-6 md:p-8 shadow-lg border border-slate-200 hover:shadow-2xl transition-all duration-500 relative overflow-hidden"
+                className="bg-white rounded-3xl p-6 md:p-8 shadow-lg border border-slate-200 transition-all duration-300"
                 whileHover={{
-                  y: -8,
-                  scale: 1.02,
-                  boxShadow: "0 25px 50px rgba(0,0,0,0.15)",
+                  y: -4, // Reduced from -8
+                  scale: 1.01, // Reduced from 1.02
+                  boxShadow: "0 15px 30px rgba(0,0,0,0.1)", // Lighter shadow
                 }}
+                transition={{ duration: 0.2 }} // Faster transition
               >
                 {/* Animated Background Gradient */}
                 <motion.div
@@ -220,7 +189,7 @@ export default function ProjectsSection() {
                   style={{
                     background: `linear-gradient(135deg, ${project.iconColor}, transparent)`,
                   }}
-                  transition={{ duration: 0.5 }}
+                  transition={{ duration: 0.2 }} // Faster transition
                 />
 
                 {/* Mobile: Vertical Layout, Desktop: Horizontal Layout */}
@@ -374,22 +343,19 @@ export default function ProjectsSection() {
                         {project.technologies.map((tech, techIndex) => (
                           <motion.span
                             key={techIndex}
-                            className="inline-flex items-center space-x-2 px-3 lg:px-4 py-1.5 lg:py-2 rounded-xl text-xs lg:text-sm font-medium border transition-all duration-300 relative overflow-hidden"
+                            className="inline-flex items-center space-x-2 px-3 lg:px-4 py-1.5 lg:py-2 rounded-xl text-xs lg:text-sm font-medium border transition-all duration-200"
                             style={{
                               backgroundColor: `${tech.color}10`,
                               borderColor: `${tech.color}30`,
                               color: tech.color,
                             }}
                             whileHover={{
-                              scale: 1.05,
-                              y: -3,
+                              scale: 1.02, // Reduced scale
+                              y: -2, // Reduced lift
                               backgroundColor: tech.color,
                               color: "white",
-                              boxShadow: `0 10px 25px ${tech.color}40`,
                             }}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: techIndex * 0.1 + 0.8 }}
+                            transition={{ duration: 0.2 }} // Faster transition
                           >
                             <motion.div
                               className="absolute inset-0 bg-gradient-to-r opacity-0"
@@ -455,7 +421,7 @@ export default function ProjectsSection() {
         >
           <motion.div className="relative inline-block" whileHover={{ scale: 1.05 }}>
             <motion.a
-              href="https://github.com/himanshu"
+              href="https://github.com/himanshu3024"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-3 px-10 py-5 bg-gradient-to-r from-slate-900 to-slate-800 text-white font-medium rounded-full shadow-2xl relative overflow-hidden group"
