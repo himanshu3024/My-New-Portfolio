@@ -16,7 +16,32 @@ import {
   CheckCircle,
   AlertCircle,
 } from "lucide-react"
-import { submitContactForm } from "@/lib/azure-functions"
+// Local API route for contact form submission
+async function submitContactForm(formData: any) {
+  try {
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const result = await response.json()
+    return result
+  } catch (error) {
+    console.error("Contact form submission error:", error)
+    return {
+      success: false,
+      message: "Failed to submit form. Please try again.",
+      error: error instanceof Error ? error.message : "Unknown error",
+    }
+  }
+}
 
 export default function EnhancedContactSection() {
   const ref = useRef(null)

@@ -1,0 +1,25 @@
+{
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": ["POST"],
+      "route": "contact"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "type": "sendGrid",
+      "direction": "out",
+      "name": "message",
+      "apiKey": "SG.DiCryj4cQD6BgQDpODr0gA.OiA5ZKXKDzIhpdd8r6IQL5T7p-CjRZ9bJ8XdQ8zgR88",
+      "from": "gandhi111000@hotmail.com"
+    }
+  ],
+  "disabled": false
+} 

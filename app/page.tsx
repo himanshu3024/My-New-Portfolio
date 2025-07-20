@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
-import ModernNavbar from "@/components/floating-navigation"
 import HeroSection from "@/components/hero-section"
 import AboutSection from "@/components/about-section"
 import ProjectsSection from "@/components/projects-section"
@@ -13,6 +12,10 @@ import TestimonialsSection from "@/components/testimonials-section"
 import JourneyTimeline from "@/components/journey-timeline"
 import ServicesSection from "@/components/services-section"
 import BackToTop from "@/components/back-to-top"
+import AnalyticsDashboard from "@/components/analytics-dashboard"
+import AIChatbot from "@/components/ai-chatbot"
+import PerformanceMonitor from "@/components/performance-monitor"
+import Cloud3DVisualization from "@/components/3d-cloud-visualization"
 
 export default function Portfolio() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -46,10 +49,7 @@ export default function Portfolio() {
 
   return (
     <motion.div ref={containerRef} className="relative min-h-screen">
-      {/* Modern Navbar */}
-      <ModernNavbar />
-
-      {/* Floating Navigation */}
+      {/* Modern Navigation */}
       <FloatingNavigation />
 
       {/* Main Content */}
@@ -59,6 +59,15 @@ export default function Portfolio() {
         </div>
         <div id="about">
           <AboutSection />
+        </div>
+        <div id="analytics">
+          <AnalyticsDashboard />
+        </div>
+        <div id="performance">
+          <PerformanceMonitor />
+        </div>
+        <div id="visualization">
+          <Cloud3DVisualization />
         </div>
         <div id="journey">
           <JourneyTimeline />
@@ -82,6 +91,9 @@ export default function Portfolio() {
 
       {/* Back to Top Button */}
       <BackToTop />
+
+      {/* AI Chatbot */}
+      <AIChatbot />
 
       {/* Scroll Progress Indicator */}
       <motion.div
