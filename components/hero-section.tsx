@@ -227,8 +227,8 @@ export default function HeroSection() {
       ref={heroRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pt-16"
     >
-      {/* Live Metrics Overlay */}
-      <div className="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg border border-slate-200">
+      {/* Live Metrics Overlay - hidden on mobile */}
+      <div className="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg border border-slate-200 hidden md:block">
         <div className="flex items-center space-x-4 text-sm">
           <div className="flex items-center space-x-1">
             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
@@ -244,56 +244,58 @@ export default function HeroSection() {
       {/* Animated Background */}
       <ParticleSystem />
 
-      {/* Cloud Tech Icons - 7 cloud-related icons */}
-      <CloudTechIcon
-        icon={Cloud}
-        color="#3B82F6"
-        position={{ x: 10, y: 20 }}
-        delay={0}
-        label="Cloud Computing"
-      />
-      <CloudTechIcon
-        icon={Server}
-        color="#8B5CF6"
-        position={{ x: 85, y: 15 }}
-        delay={1}
-        label="Server Management"
-      />
-      <CloudTechIcon
-        icon={Database}
-        color="#06B6D4"
-        position={{ x: 15, y: 70 }}
-        delay={2}
-        label="Database"
-      />
-      <CloudTechIcon
-        icon={Shield}
-        color="#10B981"
-        position={{ x: 80, y: 75 }}
-        delay={3}
-        label="Security"
-      />
-      <CloudTechIcon
-        icon={Zap}
-        color="#F59E0B"
-        position={{ x: 50, y: 10 }}
-        delay={4}
-        label="Performance"
-      />
-      <CloudTechIcon
-        icon={Globe}
-        color="#EF4444"
-        position={{ x: 5, y: 50 }}
-        delay={5}
-        label="Global Scale"
-      />
-      <CloudTechIcon
-        icon={Cpu}
-        color="#8B5CF6"
-        position={{ x: 90, y: 50 }}
-        delay={6}
-        label="Infrastructure"
-      />
+      {/* Cloud Tech Icons - hidden on mobile */}
+      <div className="hidden md:block">
+        <CloudTechIcon
+          icon={Cloud}
+          color="#3B82F6"
+          position={{ x: 10, y: 20 }}
+          delay={0}
+          label="Cloud Computing"
+        />
+        <CloudTechIcon
+          icon={Server}
+          color="#8B5CF6"
+          position={{ x: 85, y: 15 }}
+          delay={1}
+          label="Server Management"
+        />
+        <CloudTechIcon
+          icon={Database}
+          color="#06B6D4"
+          position={{ x: 15, y: 70 }}
+          delay={2}
+          label="Database"
+        />
+        <CloudTechIcon
+          icon={Shield}
+          color="#10B981"
+          position={{ x: 80, y: 75 }}
+          delay={3}
+          label="Security"
+        />
+        <CloudTechIcon
+          icon={Zap}
+          color="#F59E0B"
+          position={{ x: 50, y: 10 }}
+          delay={4}
+          label="Performance"
+        />
+        <CloudTechIcon
+          icon={Globe}
+          color="#EF4444"
+          position={{ x: 5, y: 50 }}
+          delay={5}
+          label="Global Scale"
+        />
+        <CloudTechIcon
+          icon={Cpu}
+          color="#8B5CF6"
+          position={{ x: 90, y: 50 }}
+          delay={6}
+          label="Infrastructure"
+        />
+      </div>
 
       {/* Main Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
@@ -310,7 +312,7 @@ export default function HeroSection() {
           </motion.div>
 
           {/* Main Heading */}
-          <motion.h1 variants={slideInUp} className="text-5xl md:text-7xl font-light text-slate-900 leading-tight">
+          <motion.h1 variants={slideInUp} className="text-4xl sm:text-5xl md:text-7xl font-light text-slate-900 leading-tight">
             Hi, I'm{" "}
             <span className="font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Himanshu Gandhi
@@ -318,12 +320,12 @@ export default function HeroSection() {
           </motion.h1>
 
           {/* Typewriter Subtitle */}
-          <motion.div variants={slideInUp} className="text-xl md:text-2xl text-slate-600 max-w-4xl mx-auto leading-relaxed">
+          <motion.div variants={slideInUp} className="text-lg sm:text-xl md:text-2xl text-slate-600 max-w-4xl mx-auto leading-relaxed">
             <MultiLineTypewriter lines={typewriterLines} />
           </motion.div>
 
           {/* Description */}
-          <motion.p variants={slideInUp} className="text-lg text-slate-500 max-w-3xl mx-auto leading-relaxed">
+          <motion.p variants={slideInUp} className="text-base sm:text-lg text-slate-500 max-w-3xl mx-auto leading-relaxed">
             Passionate cloud computing professional with expertise in AWS, Azure, and Google Cloud Platform. 
             Specializing in scalable architectures, DevOps automation, and infrastructure as code.
           </motion.p>

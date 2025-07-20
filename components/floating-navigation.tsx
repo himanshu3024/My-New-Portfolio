@@ -3,21 +3,22 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Home, User, Briefcase, Award, Mail, Menu, X, Github, Linkedin, Download, Activity, Gauge, Box } from "lucide-react"
+import Link from "next/link"
 
 export default function FloatingNavigation() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [activeSection, setActiveSection] = useState("hero")
+  // Remove scrollToSection and activeSection logic
 
   const navItems = [
-    { id: "hero", label: "Home", icon: Home },
-    { id: "about", label: "About", icon: User },
-    { id: "analytics", label: "Analytics", icon: Activity },
-    { id: "performance", label: "Performance", icon: Gauge },
-    { id: "visualization", label: "3D Cloud", icon: Box },
-    { id: "journey", label: "Journey", icon: Award },
-    { id: "projects", label: "Projects", icon: Briefcase },
-    { id: "contact", label: "Contact", icon: Mail },
+    { href: "/", label: "Home", icon: Home },
+    { href: "/about", label: "About", icon: User },
+    { href: "/experience", label: "Experience", icon: Briefcase },
+    { href: "/projects", label: "Projects", icon: Briefcase },
+    { href: "/services", label: "Services", icon: Award },
+    { href: "/testimonials", label: "Testimonials", icon: Activity },
+    { href: "/contact", label: "Contact", icon: Mail },
+    // Resume link removed
   ]
 
   useEffect(() => {
@@ -33,7 +34,7 @@ export default function FloatingNavigation() {
           const sectionTop = section.offsetTop
           const sectionBottom = sectionTop + section.offsetHeight
           if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-            setActiveSection(navItems[index].id)
+            // setActiveSection(navItems[index].id) // This line is removed
           }
         }
       })
@@ -43,13 +44,7 @@ export default function FloatingNavigation() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-    }
-    setIsOpen(false)
-  }
+  // Remove scrollToSection and activeSection logic
 
   return (
     <>
@@ -79,33 +74,15 @@ export default function FloatingNavigation() {
 
             {/* Navigation Links */}
             <div className="flex items-center space-x-1">
-              {navItems.map((item, index) => (
-                <motion.button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`relative px-4 py-2 rounded-lg transition-all duration-300 flex items-center space-x-2 ${
-                    activeSection === item.id
-                      ? "text-blue-600 bg-blue-50"
-                      : "text-slate-600 hover:text-blue-600 hover:bg-slate-50"
-                  }`}
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 + 0.5 }}
-                >
-                  <item.icon className="w-4 h-4" />
-                  <span className="font-medium text-sm">{item.label}</span>
-                  
-                  {/* Active indicator */}
-                  {activeSection === item.id && (
-                    <motion.div
-                      className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-blue-600 rounded-full"
-                      layoutId="activeIndicator"
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    />
-                  )}
-                </motion.button>
+              {navItems.map((item) => (
+                <Link key={item.href} href={item.href} legacyBehavior>
+                  <a
+                    className={`relative px-4 py-2 rounded-lg transition-all duration-300 flex items-center space-x-2 text-slate-600 hover:text-blue-600 hover:bg-slate-50`}
+                  >
+                    <item.icon className="w-4 h-4" />
+                    <span className="font-medium text-sm">{item.label}</span>
+                  </a>
+                </Link>
               ))}
             </div>
 
@@ -227,20 +204,19 @@ export default function FloatingNavigation() {
               <div className="px-6 py-4">
                 {/* Navigation Links */}
                 <div className="space-y-2 mb-6">
-                  {navItems.map((item, index) => (
+                  {navItems.map((item) => (
                     <motion.button
-                      key={item.id}
-                      onClick={() => scrollToSection(item.id)}
+                      key={item.href}
+                      onClick={() => setIsOpen(false)}
                       className={`flex items-center space-x-3 w-full p-3 rounded-lg transition-all duration-300 ${
-                        activeSection === item.id
-                          ? "bg-blue-600 text-white"
-                          : "text-slate-600 hover:text-blue-600 hover:bg-slate-50"
+                        // activeSection === item.id // This line is removed
+                        "text-slate-600 hover:text-blue-600 hover:bg-slate-50"
                       }`}
                       whileHover={{ x: 5 }}
                       whileTap={{ scale: 0.95 }}
                       initial={{ x: -20, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: index * 0.1 }}
+                      transition={{ delay: 0 }} // This line is removed
                     >
                       <item.icon className="w-5 h-5" />
                       <span className="font-medium">{item.label}</span>

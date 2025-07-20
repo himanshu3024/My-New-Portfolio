@@ -124,7 +124,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<ResponseD
 
         if (response.ok) {
           console.log("✅ Email sent successfully via Resend")
-        } else {
+    } else {
           console.error("Resend error:", await response.text())
         }
       } catch (error) {

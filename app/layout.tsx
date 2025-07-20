@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { ErrorBoundary } from "@/components/error-boundary"
+import FloatingNavigation from "@/components/floating-navigation"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -183,7 +184,8 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
-        
+        {/* Global Navigation Bar */}
+        <FloatingNavigation />
         <ErrorBoundary>
           {children}
         </ErrorBoundary>
