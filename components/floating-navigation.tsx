@@ -1,13 +1,32 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Home, User, Briefcase, Award, Mail, Menu, X, Github, Linkedin, Download, Activity, Gauge, Box } from "lucide-react"
+import { Home, User, Briefcase, Award, Mail, Menu, X, Github, Linkedin, Download, Activity, Gauge, Box, Sun, Moon } from "lucide-react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 export default function FloatingNavigation() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [theme, setTheme] = useState<'light' | 'dark'>(typeof window !== 'undefined' && window.localStorage.getItem('theme') === 'dark' ? 'dark' : 'light')
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '/'
+
+  // Apply theme to document
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      document.documentElement.classList.remove('light', 'dark')
+      document.documentElement.classList.add(theme)
+      window.localStorage.setItem('theme', theme)
+    }
+  }, [theme])
+
+  // Animate theme transition
+  const toggleTheme = useCallback(() => {
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))
+  }, [])
+
   // Remove scrollToSection and activeSection logic
 
   const navItems = [
@@ -25,19 +44,7 @@ export default function FloatingNavigation() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50)
 
-      // Update active section with improved scrollspy
-      const sections = navItems.map((item) => document.getElementById(item.id))
-      const scrollPosition = window.scrollY + window.innerHeight / 3
-
-      sections.forEach((section, index) => {
-        if (section) {
-          const sectionTop = section.offsetTop
-          const sectionBottom = sectionTop + section.offsetHeight
-          if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-            // setActiveSection(navItems[index].id) // This line is removed
-          }
-        }
-      })
+      // Scrollspy logic removed (no item.id in navItems)
     }
 
     window.addEventListener("scroll", handleScroll)
@@ -58,6 +65,7 @@ export default function FloatingNavigation() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.2 }}
+        style={{ position: 'sticky', top: 0 }}
       >
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
@@ -74,16 +82,30 @@ export default function FloatingNavigation() {
 
             {/* Navigation Links */}
             <div className="flex items-center space-x-1">
-              {navItems.map((item) => (
-                <Link key={item.href} href={item.href} legacyBehavior>
-                  <a
-                    className={`relative px-4 py-2 rounded-lg transition-all duration-300 flex items-center space-x-2 text-slate-600 hover:text-blue-600 hover:bg-slate-50`}
-                  >
-                    <item.icon className="w-4 h-4" />
-                    <span className="font-medium text-sm">{item.label}</span>
-                  </a>
-                </Link>
-              ))}
+              {navItems.map((item) => {
+                const isActive = pathname === item.href
+                return (
+                  <Link key={item.href} href={item.href} legacyBehavior>
+                    <a
+                      className={`relative px-4 py-2 rounded-lg transition-all duration-300 flex items-center space-x-2
+                        ${isActive ? 'text-blue-700 font-semibold bg-blue-50 shadow-md' : 'text-slate-600'}
+                        hover:text-blue-600 hover:bg-slate-50`
+                      }
+                      style={{ scrollBehavior: 'smooth' }}
+                    >
+                      <item.icon className="w-4 h-4" />
+                      <span className="font-medium text-sm">{item.label}</span>
+                      {isActive && (
+                        <motion.span
+                          layoutId="nav-active-underline"
+                          className="absolute left-2 right-2 -bottom-1 h-1 rounded-full bg-gradient-to-r from-blue-500 to-purple-500"
+                          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                        />
+                      )}
+                    </a>
+                  </Link>
+                )
+              })}
             </div>
 
             {/* Right side actions */}
@@ -101,7 +123,7 @@ export default function FloatingNavigation() {
               </motion.a>
               
               <motion.a
-                href="https://linkedin.com/in/himanshu-gandhi"
+                href="https://www.linkedin.com/in/himanshu-gandhi-891204160/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all duration-300"
@@ -111,15 +133,29 @@ export default function FloatingNavigation() {
                 <Linkedin className="w-5 h-5" />
               </motion.a>
 
-              {/* CTA Button */}
+              {/* Dark Mode Toggle */}
               <motion.button
+                aria-label="Toggle dark mode"
+                className="p-2 rounded-lg transition-all duration-300 bg-slate-100 hover:bg-blue-100 text-slate-600 hover:text-blue-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-blue-900 dark:hover:text-yellow-400"
+                onClick={toggleTheme}
+                whileHover={{ scale: 1.1, rotate: 10 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </motion.button>
+
+              {/* CTA Button */}
+              <motion.a
+                href="/Himanshu Gandhi Resume.pdf"
+                download
                 className="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium text-sm flex items-center space-x-2 hover:shadow-lg transition-all duration-300"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
+                aria-label="Download Resume"
               >
                 <Download className="w-4 h-4" />
                 <span>Resume</span>
-              </motion.button>
+              </motion.a>
             </div>
           </div>
         </div>
@@ -149,37 +185,48 @@ export default function FloatingNavigation() {
               <span className="font-semibold text-slate-900">Himanshu Gandhi</span>
             </motion.div>
 
-            {/* Mobile Menu Button */}
-            <motion.button
-              className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all duration-300"
-              onClick={() => setIsOpen(!isOpen)}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <AnimatePresence mode="wait">
-                {isOpen ? (
-                  <motion.div
-                    key="close"
-                    initial={{ rotate: -90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <X className="w-6 h-6" />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="menu"
-                    initial={{ rotate: 90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: -90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Menu className="w-6 h-6" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.button>
+            {/* Mobile Menu Button & Dark Mode Toggle */}
+            <div className="flex items-center space-x-2">
+              <motion.button
+                aria-label="Toggle dark mode"
+                className="p-2 rounded-lg transition-all duration-300 bg-slate-100 hover:bg-blue-100 text-slate-600 hover:text-blue-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-blue-900 dark:hover:text-yellow-400"
+                onClick={toggleTheme}
+                whileHover={{ scale: 1.1, rotate: 10 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </motion.button>
+              <motion.button
+                className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all duration-300"
+                onClick={() => setIsOpen(!isOpen)}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <AnimatePresence mode="wait">
+                  {isOpen ? (
+                    <motion.div
+                      key="close"
+                      initial={{ rotate: -90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: 90, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <X className="w-6 h-6" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="menu"
+                      initial={{ rotate: 90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: -90, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <Menu className="w-6 h-6" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.button>
+            </div>
           </div>
         </div>
       </motion.nav>
@@ -239,7 +286,7 @@ export default function FloatingNavigation() {
                     </motion.a>
                     
                     <motion.a
-                      href="https://linkedin.com/in/himanshu-gandhi"
+                      href="https://www.linkedin.com/in/himanshu-gandhi-891204160/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all duration-300"

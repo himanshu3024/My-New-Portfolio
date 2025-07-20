@@ -192,7 +192,7 @@ export default function ProjectsSection() {
   return (
     <section ref={ref} className="py-24 px-6 bg-slate-50 relative overflow-hidden">
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Projects Section */}
+        {/* Projects Section Header */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -219,165 +219,119 @@ export default function ProjectsSection() {
           </motion.p>
         </motion.div>
 
-        {/* Projects Grid */}
+        {/* Projects Responsive Grid */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="space-y-16 mb-32"
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 mb-32"
         >
           {projects.map((project, index) => (
             <motion.div
               key={index}
               variants={slideInFromLeft}
-              className="group relative"
-              onHoverStart={() => setHoveredProject(index)}
-              onHoverEnd={() => setHoveredProject(null)}
+              className="group relative card-modern overflow-hidden flex flex-col shadow-2xl border-2 border-transparent hover:border-blue-400/60 transition-all duration-300 p-8 min-h-[480px] md:min-h-[520px]"
+              whileHover={{ scale: 1.03, boxShadow: "0 16px 48px 0 rgba(30,41,59,0.16)" }}
+              whileTap={{ scale: 0.98 }}
             >
-              <motion.div
-                className="bg-white rounded-3xl p-6 md:p-8 shadow-lg border border-slate-200 transition-all duration-300"
-                whileHover={{
-                  y: -4,
-                  scale: 1.01,
-                  boxShadow: "0 15px 30px rgba(0,0,0,0.1)",
-                }}
-                transition={{ duration: 0.2 }}
-              >
-                {/* Animated Background Gradient */}
-                <motion.div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-5 rounded-3xl"
-                  style={{
-                    background: `linear-gradient(135deg, ${project.iconColor}, transparent)`,
-                  }}
-                  transition={{ duration: 0.2 }}
-                />
-
-                {/* Mobile: Vertical Layout, Desktop: Horizontal Layout */}
-                <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6 lg:gap-8 items-start relative z-10">
-                  {/* Project Info */}
-                  <div className="w-full lg:col-span-2 space-y-4 lg:space-y-6">
-                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                      <div className="flex items-center space-x-4">
-                        <div
-                          className="p-3 rounded-xl"
-                          style={{ backgroundColor: `${project.iconColor}15` }}
-                        >
-                          <project.icon className="w-8 h-8" style={{ color: project.iconColor }} />
-                        </div>
-                        <div>
-                          <h3 className="text-2xl font-semibold text-slate-900">
-                            {project.title}
-                          </h3>
-                          <div className="flex items-center space-x-2 mt-1">
-                            <span
-                              className="px-3 py-1 rounded-full text-xs font-medium text-white"
-                              style={{ backgroundColor: project.statusColor }}
-                            >
-                              {project.status}
-                            </span>
-                            <span className="text-sm text-slate-500">{project.year}</span>
-                            <div className="flex items-center space-x-1">
-                              {[...Array(project.rating)].map((_, i) => (
-                                <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                                            <p className="text-slate-600 leading-relaxed text-lg">
-                      {project.description}
-                    </p>
-
-                    {/* Project Highlights */}
-                    <div className="space-y-2">
-                      <h4 className="font-semibold text-slate-900">Key Achievements:</h4>
-                      <ul className="space-y-1">
-                        {project.highlights.map((highlight, idx) => (
-                                                      <li key={idx} className="flex items-start space-x-2 text-sm text-slate-600">
-                            <span className="text-green-500 mt-1">✓</span>
-                            <span>{highlight}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Tech Stack */}
-                    <div className="space-y-3">
-                      <h4 className="font-semibold text-slate-900">Technologies Used:</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {project.technologies.map((tech, techIndex) => (
-                          <motion.span
-                            key={techIndex}
-                            className="px-3 py-1 rounded-full text-sm font-medium text-white shadow-md"
-                            style={{ backgroundColor: tech.color }}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: techIndex * 0.1 }}
-                            whileHover={{ scale: 1.05, y: -2 }}
-                          >
-                            {tech.icon} {tech.name}
-                          </motion.span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex flex-wrap gap-4 pt-4">
-                      {project.liveUrl && project.liveUrl !== "#" && (
-                        <motion.a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300"
-                          whileHover={{ scale: 1.05, y: -2 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <Globe className="w-5 h-5" />
-                          <span>Live Demo</span>
-                          <ArrowUpRight className="w-4 h-4" />
-                        </motion.a>
-                      )}
-                      {project.githubUrl && project.githubUrl !== "#" && (
-                        <motion.a
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center space-x-2 px-6 py-3 bg-slate-900 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300"
-                          whileHover={{ scale: 1.05, y: -2 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <Github className="w-5 h-5" />
-                          <span>View Code</span>
-                          <ArrowUpRight className="w-4 h-4" />
-                        </motion.a>
-                      )}
-                    </div>
+              {/* Project Image */}
+              <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-4 bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
+                {project.screenshot ? (
+                  <img
+                    src={project.screenshot}
+                    alt={project.title + " screenshot"}
+                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center w-full h-full">
+                    <project.icon className="w-16 h-16 mx-auto opacity-50" style={{ color: project.iconColor }} />
+                    <p className="text-sm text-slate-500">Project Screenshot</p>
                   </div>
-
-                  {/* Project Screenshot/Visual */}
-                  <div className="w-full lg:w-auto">
-                    <motion.div
-                      className="relative rounded-2xl overflow-hidden border border-slate-200"
-                      whileHover={{ scale: 1.02 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                                              <div className="aspect-video bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
-                        <div className="text-center space-y-2">
-                          <project.icon className="w-16 h-16 mx-auto opacity-50" style={{ color: project.iconColor }} />
-                          <p className="text-sm text-slate-500">Project Screenshot</p>
-                        </div>
-                      </div>
-                    </motion.div>
+                )}
+                {/* Status badge */}
+                <span
+                  className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-medium text-white shadow"
+                  style={{ backgroundColor: project.statusColor }}
+                >
+                  {project.status}
+                </span>
+                <span className="absolute top-3 right-3 text-xs text-slate-700 bg-white/80 rounded-full px-2 py-1 shadow">{project.year}</span>
+              </div>
+              {/* Card Content */}
+              <div className="flex-1 flex flex-col gap-5 text-base md:text-lg">
+                <div className="flex items-center gap-3 mb-1">
+                  <project.icon className="w-7 h-7" style={{ color: project.iconColor }} />
+                  <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors duration-300">
+                    {project.title}
+                  </h3>
+                  <div className="flex items-center ml-auto gap-1">
+                    {[...Array(project.rating)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    ))}
                   </div>
                 </div>
-              </motion.div>
+                <p className="text-slate-600 leading-relaxed text-base mb-2">{project.description}</p>
+                {/* Tech Stack Chips */}
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {project.technologies.map((tech, techIndex) => (
+                    <motion.span
+                      key={techIndex}
+                      className="px-3 py-1 rounded-full text-sm font-medium text-white shadow-md flex items-center gap-1"
+                      style={{ backgroundColor: tech.color }}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: techIndex * 0.08 }}
+                      whileHover={{ scale: 1.08, y: -2 }}
+                    >
+                      <span>{tech.icon}</span>
+                      {tech.name}
+                    </motion.span>
+                  ))}
+                </div>
+                {/* Key Achievements */}
+                <ul className="space-y-1 mb-2">
+                  {project.highlights.map((highlight, idx) => (
+                    <li key={idx} className="flex items-start space-x-2 text-sm text-slate-600">
+                      <span className="text-green-500 mt-1">✓</span>
+                      <span>{highlight}</span>
+                    </li>
+                  ))}
+                </ul>
+                {/* Action Buttons */}
+                <div className="flex flex-wrap gap-3 mt-auto pt-2">
+                  {project.liveUrl && project.liveUrl !== "#" && (
+                    <motion.a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center space-x-2 px-5 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300"
+                      whileHover={{ scale: 1.07, y: -2 }}
+                      whileTap={{ scale: 0.97 }}
+                    >
+                      <Globe className="w-5 h-5" />
+                      <span>Live Demo</span>
+                      <ArrowUpRight className="w-4 h-4" />
+                    </motion.a>
+                  )}
+                  {project.githubUrl && project.githubUrl !== "#" && (
+                    <motion.a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center space-x-2 px-5 py-2 bg-slate-900 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300"
+                      whileHover={{ scale: 1.07, y: -2 }}
+                      whileTap={{ scale: 0.97 }}
+                    >
+                      <Github className="w-5 h-5" />
+                      <span>View Code</span>
+                      <ArrowUpRight className="w-4 h-4" />
+                    </motion.a>
+                  )}
+                </div>
+              </div>
             </motion.div>
           ))}
         </motion.div>
-
-
       </div>
     </section>
   )

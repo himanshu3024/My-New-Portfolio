@@ -5,6 +5,7 @@ import type React from "react"
 import { motion, useInView, useMotionValue, useTransform } from "framer-motion"
 import { useRef, useEffect } from "react"
 import { GraduationCap, Briefcase, Award, TrendingUp } from "lucide-react"
+import Image from "next/image";
 
 // Magnetic Button Component
 const MagneticButton = ({ children, className }: { children: React.ReactNode; className?: string }) => {
@@ -222,7 +223,7 @@ export default function AboutSection() {
   }
 
   return (
-    <section ref={ref} className="py-24 px-6 bg-white relative overflow-hidden">
+    <section ref={ref} className="py-24 px-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 relative overflow-hidden">
       {/* Background Elements */}
       <motion.div
         className="absolute top-20 right-20 w-64 h-64 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full blur-3xl opacity-30"
@@ -237,32 +238,75 @@ export default function AboutSection() {
         }}
       />
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="max-w-4xl mx-auto relative z-10">
+        {/* Animated Intro + Profile */}
         <motion.div
-          variants={containerVariants}
+          className="flex flex-col md:flex-row items-center gap-10 mb-16"
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="text-center mb-20"
+          variants={containerVariants}
         >
-          <motion.h2 variants={slideInFromBottom} className="text-4xl md:text-5xl font-light text-slate-900 mb-6">
-            About
-            <motion.span
-              className="font-semibold"
-              whileHover={{
-                background: "linear-gradient(90deg, #3B82F6, #8B5CF6)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
-              {" "}
-              Me
-            </motion.span>
-          </motion.h2>
-          <motion.p variants={slideInFromBottom} className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-            Passionate cloud computing professional with expertise in AWS and Azure. Currently pursuing advanced cloud
-            technologies while building innovative solutions that bridge traditional IT and modern cloud infrastructure.
-          </motion.p>
+          {/* Profile Image */}
+          <motion.div
+            variants={slideInFromLeft}
+            className="flex-shrink-0 rounded-full overflow-hidden border-4 border-blue-200 shadow-xl bg-white"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            style={{ width: 160, height: 160 }}
+          >
+            <Image
+              src="/placeholder-user.jpg"
+              alt="Himanshu Gandhi profile"
+              width={160}
+              height={160}
+              className="object-cover w-full h-full"
+              priority
+            />
+          </motion.div>
+          {/* Animated Text Reveal */}
+          <motion.div
+            className="flex-1 text-center md:text-left"
+            variants={slideInFromRight}
+          >
+            <motion.h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">About Me</span>
+            </motion.h2>
+            <motion.p className="text-xl text-slate-700 mb-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
+              Hi! I’m Himanshu Gandhi, a passionate Cloud Computing Specialist and DevOps Engineer dedicated to building scalable, secure, and innovative solutions.
+            </motion.p>
+          </motion.div>
         </motion.div>
+
+        {/* Quick Facts & Why Cloud */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          {/* Quick Facts Card */}
+          <motion.div
+            className="rounded-2xl p-6 bg-white/70 backdrop-blur-md shadow-xl border border-slate-200 flex flex-col gap-3 items-start"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+          >
+            <h3 className="text-lg font-bold text-blue-700 mb-2">Quick Facts</h3>
+            <div className="flex items-center gap-2 text-slate-700"><span className="font-semibold">Location:</span> Toronto, Canada</div>
+            <div className="flex items-center gap-2 text-slate-700"><span className="font-semibold">Availability:</span> Open for new opportunities</div>
+            <div className="flex items-center gap-2 text-slate-700"><span className="font-semibold">Hobbies:</span> Cloud tinkering, Tech Blogging, Hiking, Chess</div>
+          </motion.div>
+          {/* Why I Love Cloud Computing */}
+          <motion.div
+            className="rounded-2xl p-6 bg-gradient-to-br from-blue-100/80 via-white/60 to-purple-100/80 shadow-xl border border-blue-200 flex flex-col gap-3 items-start"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+          >
+            <h3 className="text-lg font-bold text-blue-700 mb-2">Why I Love Cloud Computing</h3>
+            <p className="text-slate-700 text-base">
+              <span className="font-semibold text-blue-600">Cloud</span> empowers innovation, scalability, and global impact. I love how it enables anyone to build, deploy, and scale ideas with speed and security. The ever-evolving landscape keeps me learning and excited every day!
+            </p>
+          </motion.div>
+        </div>
 
         <div className="grid lg:grid-cols-2 gap-20 items-start">
           {/* Left Column - Experience & Education */}

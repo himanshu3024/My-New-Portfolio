@@ -4,6 +4,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { ErrorBoundary } from "@/components/error-boundary"
 import FloatingNavigation from "@/components/floating-navigation"
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -109,7 +110,7 @@ const structuredData = {
   image: "https://yellow-forest-08fad6510.6.azurestaticapps.net/profile-image.jpg",
   sameAs: [
     "https://github.com/himanshu3024",
-    "https://linkedin.com/in/himanshu-gandhi",
+    "https://www.linkedin.com/in/himanshu-gandhi-891204160/",
   ],
   worksFor: {
     "@type": "Organization",
@@ -171,11 +172,7 @@ const structuredData = {
   },
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`scroll-smooth ${inter.variable}`}>
       <body className={`${inter.className} antialiased`}>
@@ -189,7 +186,8 @@ export default function RootLayout({
         <ErrorBoundary>
           {children}
         </ErrorBoundary>
+        <Toaster position="top-right" toastOptions={{ duration: 4000, style: { fontSize: '1rem', borderRadius: '0.75rem', background: 'rgba(255,255,255,0.95)', color: '#1e293b', boxShadow: '0 8px 32px 0 rgba(30,41,59,0.12)' } }} />
       </body>
     </html>
-  )
+  );
 }

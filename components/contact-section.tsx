@@ -16,6 +16,7 @@ import {
   CheckCircle,
   AlertCircle,
 } from "lucide-react"
+import { toast } from "react-hot-toast";
 // Local API route for contact form submission
 async function submitContactForm(formData: any) {
   try {
@@ -83,14 +84,14 @@ export default function EnhancedContactSection() {
     {
       icon: Linkedin,
       label: "LinkedIn",
-      url: "https://linkedin.com/in/himanshu-gandhi",
+      url: "https://www.linkedin.com/in/himanshu-gandhi-891204160/",
       username: "@himanshu-gandhi",
     },
     {
       icon: Github,
       label: "GitHub",
-      url: "https://github.com/himanshu",
-      username: "@himanshu",
+      url: "https://github.com/himanshu3024",
+      username: "@himanshu3024",
     },
     {
       icon: ExternalLink,
@@ -130,17 +131,20 @@ export default function EnhancedContactSection() {
           message: result.message || "Thank you for your message! I'll get back to you within 24 hours.",
         })
         setFormData({ name: "", email: "", subject: "", message: "" })
+        toast.success("Message sent! I'll get back to you soon.")
       } else {
         setSubmitStatus({
           type: "error",
           message: result.message || "Something went wrong. Please try again.",
         })
+        toast.error("Failed to send message. Please try again.")
       }
     } catch (error) {
       setSubmitStatus({
         type: "error",
         message: "Failed to send message. Please try again later.",
       })
+      toast.error("Failed to send message. Please try again later.")
     } finally {
       setIsSubmitting(false)
     }
@@ -170,8 +174,8 @@ export default function EnhancedContactSection() {
   }
 
   return (
-    <section ref={ref} className="py-24 px-6 bg-slate-50">
-      <div className="max-w-7xl mx-auto">
+    <section ref={ref} className="py-24 px-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      <div className="max-w-4xl mx-auto">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -206,12 +210,12 @@ export default function EnhancedContactSection() {
                 <motion.div key={index} variants={itemVariants}>
                   <motion.a
                     href={info.href}
-                    className="flex items-center space-x-4 p-6 bg-white rounded-xl border border-slate-200 hover:shadow-md transition-all duration-300 group"
-                    whileHover={{ y: -2 }}
+                    className="flex items-center space-x-4 p-6 bg-white/70 backdrop-blur-md rounded-2xl border border-slate-200 hover:shadow-xl transition-all duration-300 group"
+                    whileHover={{ y: -2, scale: 1.03 }}
                   >
-                    <div className="p-3 bg-blue-50 rounded-lg">
+                    <motion.div className="p-3 bg-blue-50 rounded-lg" whileHover={{ rotate: 12 }}>
                       <info.icon className="w-5 h-5 text-blue-600" />
-                    </div>
+                    </motion.div>
                     <div>
                       <h4 className="text-slate-900 font-medium">{info.label}</h4>
                       <p className="text-slate-600">{info.value}</p>
@@ -232,10 +236,12 @@ export default function EnhancedContactSection() {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center space-x-3 p-4 bg-white rounded-xl border border-slate-200 hover:shadow-md transition-all duration-300 group"
-                    whileHover={{ y: -2 }}
+                    className="flex items-center space-x-3 p-4 bg-white/70 backdrop-blur-md rounded-2xl border border-slate-200 hover:shadow-xl transition-all duration-300 group"
+                    whileHover={{ y: -2, scale: 1.03 }}
                   >
-                    <social.icon className="w-5 h-5 text-slate-600" />
+                    <motion.div whileHover={{ rotate: 12 }}>
+                      <social.icon className="w-5 h-5 text-slate-600" />
+                    </motion.div>
                     <div>
                       <p className="text-slate-900 font-medium text-sm">{social.label}</p>
                       <p className="text-slate-500 text-xs">{social.username}</p>
@@ -246,7 +252,7 @@ export default function EnhancedContactSection() {
             </motion.div>
 
             {/* Availability Status */}
-            <motion.div variants={itemVariants} className="p-6 bg-green-50 rounded-xl border border-green-200">
+            <motion.div variants={itemVariants} className="p-6 bg-green-50/80 backdrop-blur-md rounded-2xl border border-green-200 shadow-xl">
               <div className="flex items-center space-x-3 mb-3">
                 <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
                 <span className="text-green-700 font-semibold">Available for opportunities</span>
@@ -281,7 +287,8 @@ export default function EnhancedContactSection() {
             <motion.form
               variants={itemVariants}
               onSubmit={handleSubmit}
-              className="space-y-6 bg-white p-8 rounded-2xl border border-slate-200 shadow-sm"
+              className="bg-white/80 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-200 p-8 space-y-8"
+              autoComplete="off"
             >
               <h3 className="text-2xl font-semibold text-slate-900 mb-6">Send a Message</h3>
 
@@ -305,91 +312,88 @@ export default function EnhancedContactSection() {
                 </motion.div>
               )}
 
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-slate-700 text-sm font-medium mb-2">Name</label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Floating label input */}
+                <div className="relative">
                   <input
                     type="text"
+                    id="name"
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
-                    placeholder="Your Name"
+                    className="w-full px-4 pt-6 pb-2 rounded-lg border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all duration-200 bg-white peer"
                     required
-                    disabled={isSubmitting}
+                    autoComplete="name"
+                    placeholder=" "
                   />
+                  <label htmlFor="name" className="absolute left-4 top-2 text-slate-500 text-sm transition-all duration-200 peer-focus:-top-3 peer-focus:text-xs peer-focus:text-blue-600 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-700 pointer-events-none bg-white px-1 rounded">
+                    Name
+                  </label>
                 </div>
-
-                <div>
-                  <label className="block text-slate-700 text-sm font-medium mb-2">Email</label>
+                <div className="relative">
                   <input
                     type="email"
+                    id="email"
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
-                    placeholder="your.email@example.com"
+                    className="w-full px-4 pt-6 pb-2 rounded-lg border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all duration-200 bg-white peer"
                     required
-                    disabled={isSubmitting}
+                    autoComplete="email"
+                    placeholder=" "
                   />
+                  <label htmlFor="email" className="absolute left-4 top-2 text-slate-500 text-sm transition-all duration-200 peer-focus:-top-3 peer-focus:text-xs peer-focus:text-blue-600 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-700 pointer-events-none bg-white px-1 rounded">
+                    Email
+                  </label>
                 </div>
               </div>
 
-              <div>
-                <label htmlFor="subject" className="block text-slate-700 text-sm font-medium mb-2">Subject</label>
-                <select
+              <div className="relative">
+                <input
+                  type="text"
                   id="subject"
                   name="subject"
                   value={formData.subject}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                  className="w-full px-4 pt-6 pb-2 rounded-lg border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all duration-200 bg-white peer"
                   required
-                  disabled={isSubmitting}
-                >
-                  <option value="">Select a subject</option>
-                  <option value="job-opportunity">Job Opportunity</option>
-                  <option value="collaboration">Project Collaboration</option>
-                  <option value="consultation">Consultation</option>
-                  <option value="networking">Networking</option>
-                  <option value="other">Other</option>
-                </select>
+                  placeholder=" "
+                />
+                <label htmlFor="subject" className="absolute left-4 top-2 text-slate-500 text-sm transition-all duration-200 peer-focus:-top-3 peer-focus:text-xs peer-focus:text-blue-600 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-700 pointer-events-none bg-white px-1 rounded">
+                  Subject
+                </label>
               </div>
 
-              <div>
-                <label className="block text-slate-700 text-sm font-medium mb-2">Message</label>
+              <div className="relative">
                 <textarea
+                  id="message"
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
-                  rows={6}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors resize-none"
-                  placeholder="Tell me about your project, opportunity, or how we can work together..."
+                  className="w-full px-4 pt-6 pb-2 rounded-lg border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all duration-200 bg-white min-h-[120px] peer"
                   required
-                  disabled={isSubmitting}
+                  rows={5}
+                  placeholder=" "
                 />
+                <label htmlFor="message" className="absolute left-4 top-2 text-slate-500 text-sm transition-all duration-200 peer-focus:-top-3 peer-focus:text-xs peer-focus:text-blue-600 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-700 pointer-events-none bg-white px-1 rounded">
+                  Message
+                </label>
               </div>
 
               <motion.button
                 type="submit"
+                className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:scale-105 hover:shadow-2xl transition-all duration-300 text-lg disabled:opacity-60 disabled:cursor-not-allowed"
+                whileHover={{ scale: 1.07, y: -2 }}
+                whileTap={{ scale: 0.98 }}
                 disabled={isSubmitting}
-                className="w-full px-6 py-4 bg-slate-900 text-white font-medium rounded-lg hover:bg-slate-800 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-                whileHover={!isSubmitting ? { scale: 1.02 } : {}}
-                whileTap={!isSubmitting ? { scale: 0.98 } : {}}
+                aria-busy={isSubmitting}
               >
                 {isSubmitting ? (
-                  <>
-                    <motion.div
-                      className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                    />
-                    <span>Sending...</span>
-                  </>
+                  <span className="flex items-center gap-2"><Send className="w-5 h-5 animate-spin" /> Sending...</span>
+                ) : submitStatus.type === "success" ? (
+                  <span className="flex items-center gap-2 text-green-200"><CheckCircle className="w-5 h-5" /> Sent!</span>
                 ) : (
-                  <>
-                    <Send className="w-5 h-5" />
-                    <span>Send Message</span>
-                  </>
+                  <span className="flex items-center gap-2"><Send className="w-5 h-5" /> Send Message</span>
                 )}
               </motion.button>
 

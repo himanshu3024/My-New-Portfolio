@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+  		fontFamily: {
+  			sans: ["Inter", "system-ui", "sans-serif"],
+  		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -59,12 +62,20 @@ const config: Config = {
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
+  			},
+  			gradient: {
+  				primary: 'linear-gradient(to right, hsl(var(--primary)), hsl(var(--primary-dark)))',
+  				secondary: 'linear-gradient(to right, hsl(var(--secondary)), hsl(var(--secondary-dark)))',
+  				accent: 'linear-gradient(to right, hsl(var(--accent)), hsl(var(--accent-dark)))',
+  				destructive: 'linear-gradient(to right, hsl(var(--destructive)), hsl(var(--destructive-dark)))'
   			}
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
+  			sm: 'calc(var(--radius) - 4px)',
+  			'xl': '1.25rem',
+  			'2xl': '1.5rem',
   		},
   		keyframes: {
   			'accordion-down': {
@@ -87,6 +98,10 @@ const config: Config = {
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'
+  		},
+  		boxShadow: {
+  			'xl': '0 8px 32px 0 rgba(30,41,59,0.12)',
+  			'2xl': '0 16px 48px 0 rgba(30,41,59,0.16)',
   		}
   	}
   },
