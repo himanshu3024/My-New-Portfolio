@@ -58,6 +58,11 @@ export async function POST(request: NextRequest): Promise<NextResponse<ResponseD
     // Get SendGrid API key from environment
     const sendGridApiKey = process.env.SENDGRID_API_KEY
     
+    console.log("🔍 Debug - Environment check:")
+    console.log("🔍 SENDGRID_API_KEY:", sendGridApiKey ? "Found" : "Not found")
+    console.log("🔍 RESEND_API_KEY:", process.env.RESEND_API_KEY ? "Found" : "Not found")
+    console.log("🔍 NODE_ENV:", process.env.NODE_ENV)
+    
     if (!sendGridApiKey) {
       console.warn("SendGrid API key not found in environment variables")
     }
@@ -65,12 +70,66 @@ export async function POST(request: NextRequest): Promise<NextResponse<ResponseD
     // Simulate database save
     await new Promise((resolve) => setTimeout(resolve, 500))
 
-    // Simulate email notification with SendGrid
-    if (sendGridApiKey && sendGridApiKey !== "YOUR_SENDGRID_API_KEY_HERE") {
-      // Here you would integrate with SendGrid
-      console.log("SendGrid API key found, would send email")
-    } else {
-      console.log("SendGrid API key not found or using placeholder, skipping email")
+    // Send email notification - Skip SendGrid due to Hotmail blocking, use Resend directly
+    console.log("🚫 Skipping SendGrid due to Hotmail blocking - using Resend instead")
+    await sendViaResend(submissionData)
+
+    // Helper function to send via Resend
+    async function sendViaResend(data: any) {
+      const resendApiKey = process.env.RESEND_API_KEY
+      
+      console.log("🔍 Debug - RESEND_API_KEY:", resendApiKey ? "Found" : "Not found")
+      console.log("🔍 Debug - All env vars:", Object.keys(process.env).filter(key => key.includes('RESEND')))
+      
+      if (!resendApiKey) {
+        console.log("📧 Resend not configured - sign up at https://resend.com for free email service")
+        console.log("💡 Make sure RESEND_API_KEY is in your .env file")
+        return
+      }
+
+      try {
+        const response = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${resendApiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from: "Portfolio <onboarding@resend.dev>",
+            to: ["varunrockx@gmail.com"],
+            subject: `Portfolio Contact: ${data.subject}`,
+            html: `
+              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #3B82F6;">New Contact Form Submission</h2>
+                <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                  <p><strong>Name:</strong> ${data.name}</p>
+                  <p><strong>Email:</strong> ${data.email}</p>
+                  <p><strong>Subject:</strong> ${data.subject}</p>
+                  <p><strong>Message:</strong></p>
+                  <div style="background: white; padding: 15px; border-radius: 4px; border-left: 4px solid #3B82F6;">
+                    ${data.message.replace(/\n/g, '<br>')}
+                  </div>
+                </div>
+                <div style="font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 15px;">
+                  <p><strong>Submission Details:</strong></p>
+                  <p>Time: ${data.timestamp}</p>
+                  <p>IP Address: ${data.ip}</p>
+                  <p>User Agent: ${data.userAgent}</p>
+                </div>
+              </div>
+            `,
+            reply_to: data.email
+          })
+        })
+
+        if (response.ok) {
+          console.log("✅ Email sent successfully via Resend")
+        } else {
+          console.error("Resend error:", await response.text())
+        }
+      } catch (error) {
+        console.error("Resend error:", error)
+      }
     }
 
     // Simulate analytics tracking

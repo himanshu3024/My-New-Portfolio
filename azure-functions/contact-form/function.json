@@ -17,9 +17,10 @@
       "type": "sendGrid",
       "direction": "out",
       "name": "message",
-      "apiKey": "YOUR_SENDGRID_API_KEY_HERE",
+      "apiKey": "SENDGRID_API_KEY",
       "from": "gandhi111000@hotmail.com"
     }
   ],
-  "disabled": false
+  "disabled": false,
+  "scriptFile": "./index.js"
 } 

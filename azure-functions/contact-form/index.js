@@ -88,8 +88,17 @@ module.exports = async function (context, req) {
             }]
         };
 
-        // Send email using SendGrid
-        context.bindings.message = emailContent;
+        // Try SendGrid first
+        try {
+            // Send email using SendGrid
+            context.bindings.message = emailContent;
+            context.log('✅ Email sent successfully via SendGrid');
+        } catch (sendGridError) {
+            context.log.warn('SendGrid failed, trying Resend:', sendGridError);
+            
+            // Fallback to Resend
+            await sendViaResend(context, { name, email, subject, message, clientIP });
+        }
 
         // Log the submission
         context.log('Contact form submission:', {
@@ -125,4 +134,58 @@ module.exports = async function (context, req) {
             error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
         };
     }
-}; 
+};
+
+// Helper function to send via Resend
+async function sendViaResend(context, data) {
+    const resendApiKey = process.env.ResendApiKey;
+    
+    if (!resendApiKey) {
+        context.log.warn('Resend API key not configured');
+        return;
+    }
+
+    try {
+        const response = await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${resendApiKey}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                from: "Portfolio <onboarding@resend.dev>",
+                to: ["gandhi111000@hotmail.com"],
+                subject: `Portfolio Contact: ${data.subject}`,
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                        <h2 style="color: #3B82F6;">New Contact Form Submission</h2>
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                            <p><strong>Name:</strong> ${data.name}</p>
+                            <p><strong>Email:</strong> ${data.email}</p>
+                            <p><strong>Subject:</strong> ${data.subject}</p>
+                            <p><strong>Message:</strong></p>
+                            <div style="background: white; padding: 15px; border-radius: 4px; border-left: 4px solid #3B82F6;">
+                                ${data.message.replace(/\n/g, '<br>')}
+                            </div>
+                        </div>
+                        <div style="font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 15px;">
+                            <p><strong>Submission Details:</strong></p>
+                            <p>Time: ${new Date().toISOString()}</p>
+                            <p>IP Address: ${data.clientIP}</p>
+                            <p>User Agent: ${data.userAgent || 'Unknown'}</p>
+                        </div>
+                    </div>
+                `,
+                reply_to: data.email
+            })
+        });
+
+        if (response.ok) {
+            context.log('✅ Email sent successfully via Resend');
+        } else {
+            context.log.error('Resend error:', await response.text());
+        }
+    } catch (error) {
+        context.log.error('Resend error:', error);
+    }
+} 
