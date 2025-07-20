@@ -1,12 +1,24 @@
 "use client"
 
 import type React from "react"
-
 import { motion, useInView } from "framer-motion"
 import { useRef, useState } from "react"
-import { Mail, Phone, MapPin, Linkedin, Github, ExternalLink, Send, Calendar, ArrowUpRight } from "lucide-react"
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Linkedin,
+  Github,
+  ExternalLink,
+  Send,
+  Calendar,
+  ArrowUpRight,
+  CheckCircle,
+  AlertCircle,
+} from "lucide-react"
+import { submitContactForm } from "@/lib/azure-functions"
 
-export default function ContactSection() {
+export default function EnhancedContactSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
   const [formData, setFormData] = useState({
@@ -16,6 +28,10 @@ export default function ContactSection() {
     message: "",
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: "success" | "error" | null
+    message: string
+  }>({ type: null, message: "" })
 
   const contactInfo = [
     {
@@ -42,13 +58,13 @@ export default function ContactSection() {
     {
       icon: Linkedin,
       label: "LinkedIn",
-      url: "https://www.linkedin.com/in/himanshu-gandhi-891204160/",
+      url: "https://linkedin.com/in/himanshu-gandhi",
       username: "@himanshu-gandhi",
     },
     {
       icon: Github,
       label: "GitHub",
-      url: "https://github.com/himanshu3024",
+      url: "https://github.com/himanshu",
       username: "@himanshu",
     },
     {
@@ -75,12 +91,34 @@ export default function ContactSection() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setSubmitStatus({ type: null, message: "" })
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    try {
+      const result = await submitContactForm({
+        ...formData,
+        timestamp: new Date().toISOString(),
+      })
 
-    setIsSubmitting(false)
-    setFormData({ name: "", email: "", subject: "", message: "" })
+      if (result.success) {
+        setSubmitStatus({
+          type: "success",
+          message: result.message || "Thank you for your message! I'll get back to you within 24 hours.",
+        })
+        setFormData({ name: "", email: "", subject: "", message: "" })
+      } else {
+        setSubmitStatus({
+          type: "error",
+          message: result.message || "Something went wrong. Please try again.",
+        })
+      }
+    } catch (error) {
+      setSubmitStatus({
+        type: "error",
+        message: "Failed to send message. Please try again later.",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const containerVariants = {
@@ -213,7 +251,7 @@ export default function ContactSection() {
             </motion.div>
           </motion.div>
 
-          {/* Contact Form */}
+          {/* Enhanced Contact Form */}
           <motion.div variants={containerVariants} initial="hidden" animate={isInView ? "visible" : "hidden"}>
             <motion.form
               variants={itemVariants}
@@ -221,6 +259,26 @@ export default function ContactSection() {
               className="space-y-6 bg-white p-8 rounded-2xl border border-slate-200 shadow-sm"
             >
               <h3 className="text-2xl font-semibold text-slate-900 mb-6">Send a Message</h3>
+
+              {/* Status Messages */}
+              {submitStatus.type && (
+                <motion.div
+                  className={`p-4 rounded-lg flex items-center space-x-3 ${
+                    submitStatus.type === "success"
+                      ? "bg-green-50 border border-green-200 text-green-700"
+                      : "bg-red-50 border border-red-200 text-red-700"
+                  }`}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  {submitStatus.type === "success" ? (
+                    <CheckCircle className="w-5 h-5" />
+                  ) : (
+                    <AlertCircle className="w-5 h-5" />
+                  )}
+                  <span>{submitStatus.message}</span>
+                </motion.div>
+              )}
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
@@ -233,6 +291,7 @@ export default function ContactSection() {
                     className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
                     placeholder="Your Name"
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -246,18 +305,21 @@ export default function ContactSection() {
                     className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
                     placeholder="your.email@example.com"
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-slate-700 text-sm font-medium mb-2">Subject</label>
+                <label htmlFor="subject" className="block text-slate-700 text-sm font-medium mb-2">Subject</label>
                 <select
+                  id="subject"
                   name="subject"
                   value={formData.subject}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
                   required
+                  disabled={isSubmitting}
                 >
                   <option value="">Select a subject</option>
                   <option value="job-opportunity">Job Opportunity</option>
@@ -278,6 +340,7 @@ export default function ContactSection() {
                   className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors resize-none"
                   placeholder="Tell me about your project, opportunity, or how we can work together..."
                   required
+                  disabled={isSubmitting}
                 />
               </div>
 
@@ -335,7 +398,7 @@ export default function ContactSection() {
                 Email Me Directly
               </motion.a>
               <motion.a
-                href="https://www.linkedin.com/in/himanshu-gandhi-891204160/"
+                href="https://linkedin.com/in/himanshu-gandhi"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-3 border-2 border-slate-300 text-slate-700 font-medium rounded-full hover:border-slate-900 hover:text-slate-900 transition-all duration-300"

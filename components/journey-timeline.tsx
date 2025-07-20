@@ -2,22 +2,7 @@
 
 import { motion, useInView } from "framer-motion"
 import { useRef, useState } from "react"
-import {
-  Briefcase,
-  Award,
-  Code,
-  Cloud,
-  Target,
-  Rocket,
-  MapPin,
-  TrendingUp,
-  Star,
-  Eye,
-  Calendar,
-  Zap,
-  Trophy,
-  Users,
-} from "lucide-react"
+import { Briefcase, Award, Code, Cloud, Target, Rocket, MapPin, TrendingUp, Star, Eye } from "lucide-react"
 
 export default function JourneyTimeline() {
   const ref = useRef(null)
@@ -59,16 +44,16 @@ export default function JourneyTimeline() {
     },
     {
       year: 2022,
-      title: "Customer Service Representative",
-      subtitle: "ETS. Africainde",
-      type: "work",
-      icon: Briefcase,
+      title: "Data Analytics & Cybersecurity",
+      subtitle: "Google Career Certificates",
+      type: "certification",
+      icon: Award,
       color: "#F59E0B",
-      location: "Pointe-Noire, Rep. of Congo",
+      location: "Remote Learning",
       description:
-        "Provided customer support by resolving inquiries, assisting with transactions, and ensuring a positive client experience through efficient communication and issue resolution.",
-      achievements: ["Recognized for consistently achieving high customer satisfaction scores through prompt issue resolution and personalized service."],
-      skills: ["Client Relationship Management", "CRM Software Handling", "Communication", "Problem Solving & Troubleshooting", "Process Improvement Awareness"],
+        "Earned multiple professional certificates in Data Analytics and Cybersecurity, building foundation for cloud security expertise.",
+      achievements: ["Google Data Analytics Certificate", "Google Cybersecurity Certificate", "SQL Proficiency"],
+      technologies: ["Python", "SQL", "Tableau", "R", "Security Tools"],
       status: "completed",
     },
     {
@@ -198,27 +183,36 @@ export default function JourneyTimeline() {
 
         {/* Timeline */}
         <div className="relative">
-          {/* Timeline Line - Hidden on mobile, visible on desktop */}
+          {/* FIXED: Timeline Line - Now properly extends through all events */}
           <motion.div
-            className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"
-            style={{ height: `${timelineEvents.length * 400}px` }}
+            className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-blue-500 via-purple-500 to-blue-500 rounded-full"
+            style={{
+              top: "60px",
+              height: `${(timelineEvents.length - 1) * 400 + 200}px`, // FIXED: Proper height calculation
+            }}
             initial={{ height: 0 }}
-            animate={isInView ? { height: `${timelineEvents.length * 400}px` } : { height: 0 }}
+            animate={
+              isInView
+                ? {
+                    height: `${(timelineEvents.length - 1) * 400 + 200}px`,
+                  }
+                : { height: 0 }
+            }
             transition={{ duration: 2, ease: "easeInOut" }}
           />
 
           {/* Timeline Events */}
           <div className="space-y-8 md:space-y-28">
             {timelineEvents.map((event, index) => (
-                <motion.div
-                  key={event.year}
-                  className={`relative flex items-center flex-col ${
-                    index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-                  }`}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
-                  transition={{ duration: 0.8, delay: index * 0.2 }}
-                >
+              <motion.div
+                key={event.year}
+                className={`relative flex items-center flex-col md:flex-row ${
+                  index % 2 !== 0 ? "md:flex-row-reverse" : ""
+                }`}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
+                animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
+                transition={{ duration: 0.8, delay: index * 0.2 }}
+              >
                 {/* Timeline Node - Hidden on mobile */}
                 <motion.div
                   className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full border-4 border-white shadow-xl items-center justify-center z-10"
@@ -292,13 +286,11 @@ export default function JourneyTimeline() {
                       </div>
                     </div>
 
-                    {/* Technologies/Skills - Compact */}
+                    {/* Technologies - Compact */}
                     <div>
-                      <h4 className="text-sm font-semibold text-slate-900 mb-1">
-                        {event.technologies ? 'Technologies' : 'Skills'}
-                      </h4>
+                      <h4 className="text-sm font-semibold text-slate-900 mb-1">Technologies</h4>
                       <div className="flex flex-wrap gap-1">
-                        {(event.technologies || event.skills)?.slice(0, 4).map((item, i) => (
+                        {event.technologies.slice(0, 4).map((tech, i) => (
                           <motion.span
                             key={i}
                             className="px-2 py-0.5 bg-slate-100 text-slate-700 text-xs rounded-full"
@@ -311,22 +303,19 @@ export default function JourneyTimeline() {
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: i * 0.05 + 0.8 }}
                           >
-                            {item}
+                            {tech}
                           </motion.span>
                         ))}
-                        {(event.technologies || event.skills)?.length > 4 && (
-                          <motion.span
-                            className="px-2 py-0.5 bg-slate-100 text-slate-600 text-xs rounded-full"
-                            whileHover={{ scale: 1.05 }}
-                          >
-                            +{(event.technologies || event.skills).length - 4} more
-                          </motion.span>
-                        )}
                       </div>
                     </div>
 
-                    
-                    
+                    {/* Hover Effect */}
+                    <motion.div
+                      className="absolute inset-0 opacity-0 rounded-2xl"
+                      style={{ backgroundColor: `${event.color}05` }}
+                      whileHover={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    />
                   </motion.div>
                 </motion.div>
               </motion.div>
@@ -334,7 +323,7 @@ export default function JourneyTimeline() {
           </div>
         </div>
 
-        {/* Vision Section - New Addition */}
+        {/* Vision Section */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -346,22 +335,6 @@ export default function JourneyTimeline() {
               className="relative p-8 bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 rounded-3xl border border-blue-200 shadow-xl overflow-hidden"
               whileHover={{ scale: 1.02, y: -5 }}
             >
-              {/* Background Pattern */}
-              <motion.div
-                className="absolute inset-0 opacity-10"
-                style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fillRule='evenodd'%3E%3Cg fill='%233B82F6' fillOpacity='1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                }}
-                animate={{
-                  backgroundPosition: ["0px 0px", "60px 60px"],
-                }}
-                transition={{
-                  duration: 20,
-                  repeat: Number.POSITIVE_INFINITY,
-                  ease: "linear",
-                }}
-              />
-
               {/* Vision Icon */}
               <motion.div
                 className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6 relative"
@@ -369,11 +342,6 @@ export default function JourneyTimeline() {
                 transition={{ duration: 0.8 }}
               >
                 <Eye className="w-10 h-10 text-white" />
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full opacity-0"
-                  whileHover={{ opacity: 0.3, scale: 1.2 }}
-                  transition={{ duration: 0.3 }}
-                />
               </motion.div>
 
               {/* Vision Content */}
@@ -433,27 +401,6 @@ export default function JourneyTimeline() {
               >
                 💪 Ready to dedicate everything to achieve this vision
               </motion.div>
-
-              {/* Floating Elements */}
-              {Array.from({ length: 3 }).map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute w-4 h-4 bg-blue-400 rounded-full opacity-20"
-                  style={{
-                    left: `${20 + i * 30}%`,
-                    top: `${10 + (i % 2) * 80}%`,
-                  }}
-                  animate={{
-                    y: [0, -20, 0],
-                    opacity: [0.2, 0.6, 0.2],
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Number.POSITIVE_INFINITY,
-                    delay: i * 0.5,
-                  }}
-                />
-              ))}
             </motion.div>
           </motion.div>
         </motion.div>
@@ -496,191 +443,6 @@ export default function JourneyTimeline() {
               <div className="text-slate-600 text-sm">{stat.label}</div>
             </motion.div>
           ))}
-        </motion.div>
-
-        {/* Future Roadmap Section - NEW JAW-DROPPING SECTION */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          className="mt-20 mb-16"
-        >
-          <motion.h2
-            variants={itemVariants}
-            className="text-4xl md:text-5xl font-light text-slate-900 mb-6 text-center"
-          >
-            Future
-            <span className="font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              {" "}
-              Roadmap
-            </span>
-          </motion.h2>
-          <motion.p
-            variants={itemVariants}
-            className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed text-center mb-12"
-          >
-            Strategic milestones and ambitious goals that showcase my commitment to becoming a cloud computing leader.
-          </motion.p>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-            {[
-              {
-                timeline: "Next 6 Months",
-                title: "Cloud Certifications",
-                description: "AWS Solutions Architect Associate & Azure DevOps Engineer Expert",
-                icon: Trophy,
-                color: "#3B82F6",
-                priority: "High",
-                impact: "Career Ready",
-              },
-              {
-                timeline: "6-12 Months",
-                title: "Enterprise Projects",
-                description: "Lead multi-cloud migration projects and infrastructure automation",
-                icon: Rocket,
-                color: "#10B981",
-                priority: "Critical",
-                impact: "Industry Experience",
-              },
-              {
-                timeline: "1-2 Years",
-                title: "Team Leadership",
-                description: "Mentor junior developers and lead cloud transformation initiatives",
-                icon: Users,
-                color: "#F59E0B",
-                priority: "Strategic",
-                impact: "Leadership Skills",
-              },
-              {
-                timeline: "2-3 Years",
-                title: "Innovation Hub",
-                description: "Architect cutting-edge solutions and contribute to open-source projects",
-                icon: Zap,
-                color: "#8B5CF6",
-                priority: "Visionary",
-                impact: "Industry Impact",
-              },
-            ].map((roadmap, index) => (
-              <motion.div
-                key={index}
-                variants={itemVariants}
-                className="relative group"
-                whileHover={{ y: -10, scale: 1.02 }}
-              >
-                <motion.div
-                  className="p-6 bg-white rounded-3xl border border-slate-200 shadow-lg relative overflow-hidden"
-                  whileHover={{
-                    boxShadow: `0 25px 50px ${roadmap.color}20`,
-                    borderColor: roadmap.color,
-                  }}
-                >
-                  {/* Animated Background */}
-                  <motion.div
-                    className="absolute inset-0 opacity-0 group-hover:opacity-5"
-                    style={{ backgroundColor: roadmap.color }}
-                    transition={{ duration: 0.3 }}
-                  />
-
-                  {/* Timeline Badge */}
-                  <motion.div
-                    className="inline-block px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-xs font-bold mb-4"
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    {roadmap.timeline}
-                  </motion.div>
-
-                  {/* Icon */}
-                  <motion.div
-                    className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 relative"
-                    style={{ backgroundColor: `${roadmap.color}15` }}
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                  >
-                    <roadmap.icon className="w-8 h-8" style={{ color: roadmap.color }} />
-                  </motion.div>
-
-                  {/* Content */}
-                  <h4 className="text-lg font-semibold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
-                    {roadmap.title}
-                  </h4>
-                  <p className="text-slate-600 text-sm leading-relaxed mb-4">{roadmap.description}</p>
-
-                  {/* Metrics */}
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs text-slate-500">Priority:</span>
-                      <motion.span
-                        className="text-xs font-medium px-2 py-1 rounded-full text-white"
-                        style={{ backgroundColor: roadmap.color }}
-                        whileHover={{ scale: 1.1 }}
-                      >
-                        {roadmap.priority}
-                      </motion.span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs text-slate-500">Impact:</span>
-                      <span className="text-xs font-medium text-slate-700">{roadmap.impact}</span>
-                    </div>
-                  </div>
-
-                  {/* Progress Indicator */}
-                  <motion.div
-                    className="mt-4 h-2 bg-slate-100 rounded-full overflow-hidden"
-                    whileHover={{ scale: 1.02 }}
-                  >
-                    <motion.div
-                      className="h-full rounded-full"
-                      style={{ backgroundColor: roadmap.color }}
-                      initial={{ width: 0 }}
-                      animate={{ width: `${25 + index * 20}%` }}
-                      transition={{ delay: index * 0.2 + 1, duration: 1.5 }}
-                    />
-                  </motion.div>
-
-                  {/* Floating Elements */}
-                  <motion.div
-                    className="absolute top-4 right-4 w-2 h-2 rounded-full opacity-60"
-                    style={{ backgroundColor: roadmap.color }}
-                    animate={{
-                      scale: [1, 1.5, 1],
-                      opacity: [0.6, 1, 0.6],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Number.POSITIVE_INFINITY,
-                      delay: index * 0.5,
-                    }}
-                  />
-                </motion.div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Call to Action */}
-          <motion.div variants={itemVariants} className="text-center mt-12">
-            <motion.div
-              className="inline-block p-6 bg-gradient-to-r from-slate-900 to-slate-800 rounded-3xl text-white relative overflow-hidden"
-              whileHover={{ scale: 1.02, y: -5 }}
-            >
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0"
-                whileHover={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              />
-              <div className="relative z-10">
-                <Calendar className="w-8 h-8 mx-auto mb-3" />
-                <h3 className="text-xl font-semibold mb-2">Ready to Start Immediately</h3>
-                <p className="text-slate-300 text-sm mb-4">
-                  Committed to delivering exceptional results from day one while pursuing these ambitious goals.
-                </p>
-                <motion.div
-                  className="inline-block px-4 py-2 bg-white/20 rounded-full text-sm font-medium"
-                  whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.3)" }}
-                >
-                  🚀 Let's build the future together
-                </motion.div>
-              </div>
-            </motion.div>
-          </motion.div>
         </motion.div>
       </div>
     </section>

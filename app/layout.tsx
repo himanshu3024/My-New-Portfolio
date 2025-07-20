@@ -10,23 +10,23 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Himanshu Gandhi | Cloud Computing Specialist",
+  title: "Himanshu Gandhi | Cloud Computing Student",
   description:
-    "Professional portfolio of Himanshu Gandhi - Cloud Computing Specialist with expertise in AWS, Azure, and modern development practices. Currently pursuing advanced cloud technologies.",
+    "Professional portfolio of Himanshu Gandhi - Cloud Computing Student with expertise in AWS, Azure, and modern development practices. Currently pursuing advanced cloud technologies.",
   keywords: "cloud computing, AWS, Azure, DevOps, project management, Toronto, developer",
   authors: [{ name: "Himanshu Gandhi" }],
   creator: "Himanshu Gandhi",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://himanshu-gandhi.dev",
-    title: "Himanshu Gandhi | Cloud Computing Specialist",
+    url: "https://yellow-forest-08fad6510.6.azurestaticapps.net",
+    title: "Himanshu Gandhi | Cloud Computing Student",
     description: "Professional portfolio showcasing cloud computing expertise and innovative projects.",
     siteName: "Himanshu Gandhi Portfolio",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Himanshu Gandhi | Cloud Computing Specialist",
+    title: "Himanshu Gandhi | Cloud Computing Student",
     description: "Professional portfolio showcasing cloud computing expertise and innovative projects.",
   },
   robots: {

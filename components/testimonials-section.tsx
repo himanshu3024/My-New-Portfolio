@@ -11,7 +11,7 @@ export default function TestimonialsSection() {
 
   const testimonials = [
     {
-      name: "Dr. Sarah Mitchell",
+      name: "Ali Ziyaei",
       role: "Cloud Computing Professor",
       company: "George Brown College",
       image: "/placeholder.svg?height=80&width=80",

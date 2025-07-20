@@ -1,37 +1,8 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
-import { motion, useMotionValue, useSpring } from "framer-motion"
+import { motion } from "framer-motion"
 import { Download, ExternalLink, ArrowDown, MapPin, Mail, Phone } from "lucide-react"
-
-// Cursor Follower Component
-const CursorFollower = () => {
-  const cursorX = useMotionValue(-100)
-  const cursorY = useMotionValue(-100)
-
-  const springConfig = { damping: 25, stiffness: 700 }
-  const cursorXSpring = useSpring(cursorX, springConfig)
-  const cursorYSpring = useSpring(cursorY, springConfig)
-
-  useEffect(() => {
-    const moveCursor = (e: MouseEvent) => {
-      cursorX.set(e.clientX - 16)
-      cursorY.set(e.clientY - 16)
-    }
-    window.addEventListener("mousemove", moveCursor)
-    return () => window.removeEventListener("mousemove", moveCursor)
-  }, [])
-
-  return (
-    <motion.div
-      className="fixed top-0 left-0 w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full pointer-events-none z-50 opacity-60 blur-sm"
-      style={{
-        x: cursorXSpring,
-        y: cursorYSpring,
-      }}
-    />
-  )
-}
 
 // Particle System Component
 const ParticleSystem = () => {
@@ -88,24 +59,43 @@ const ParticleSystem = () => {
   )
 }
 
-// Typewriter Effect Component
-const TypewriterText = ({ text, delay = 0 }: { text: string; delay?: number }) => {
+// Enhanced Multi-Line Typewriter Effect
+const MultiLineTypewriter = ({ lines, delay = 0 }: { lines: string[]; delay?: number }) => {
+  const [currentLineIndex, setCurrentLineIndex] = useState(0)
   const [displayText, setDisplayText] = useState("")
-  const [currentIndex, setCurrentIndex] = useState(0)
+  const [currentCharIndex, setCurrentCharIndex] = useState(0)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
+    const currentLine = lines[currentLineIndex]
+
     const timer = setTimeout(
       () => {
-        if (currentIndex < text.length) {
-          setDisplayText((prev) => prev + text[currentIndex])
-          setCurrentIndex((prev) => prev + 1)
+        if (!isDeleting) {
+          // Typing
+          if (currentCharIndex < currentLine.length) {
+            setDisplayText(currentLine.substring(0, currentCharIndex + 1))
+            setCurrentCharIndex((prev) => prev + 1)
+          } else {
+            // Pause before deleting
+            setTimeout(() => setIsDeleting(true), 2000)
+          }
+        } else {
+          // Deleting
+          if (currentCharIndex > 0) {
+            setDisplayText(currentLine.substring(0, currentCharIndex - 1))
+            setCurrentCharIndex((prev) => prev - 1)
+          } else {
+            setIsDeleting(false)
+            setCurrentLineIndex((prev) => (prev + 1) % lines.length)
+          }
         }
       },
-      delay + currentIndex * 100,
-    )
+      isDeleting ? 20 : 15,
+    ) // SUPER FAST: 15ms typing, 20ms deleting
 
     return () => clearTimeout(timer)
-  }, [currentIndex, text, delay])
+  }, [currentCharIndex, currentLineIndex, isDeleting, lines])
 
   return (
     <span>
@@ -121,7 +111,7 @@ const TypewriterText = ({ text, delay = 0 }: { text: string; delay?: number }) =
   )
 }
 
-// Tech Icons Component with Enhanced Animations
+// Tech Icons Component
 const TechIcon = ({
   icon,
   color,
@@ -155,7 +145,7 @@ const TechIcon = ({
     whileTap={{ scale: 0.9 }}
   >
     <motion.img
-      src={icon || "/placeholder.svg"}
+      src={icon || "/placeholder.svg?height=40&width=40"}
       alt="Tech"
       className="w-10 h-10"
       whileHover={{ rotate: -360 }}
@@ -167,6 +157,14 @@ const TechIcon = ({
 export default function HeroSection() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const heroRef = useRef<HTMLElement>(null)
+
+  // Multiple dynamic lines for typewriter
+  const typewriterLines = [
+    "Cloud Computing Specialist crafting scalable solutions with AWS & Azure",
+    "Passionate about serverless architectures and DevOps automation",
+    "Building the future of cloud infrastructure, one deployment at a time",
+    "Transforming businesses through innovative cloud technologies",
+  ]
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -185,8 +183,8 @@ export default function HeroSection() {
     visible: {
       opacity: 1,
       transition: {
-        duration: 1.2,
-        staggerChildren: 0.3,
+        duration: 0.4,
+        staggerChildren: 0.08,
       },
     },
   }
@@ -197,7 +195,7 @@ export default function HeroSection() {
       x: 0,
       opacity: 1,
       transition: {
-        duration: 0.8,
+        duration: 0.4,
         ease: [0.25, 0.46, 0.45, 0.94],
       },
     },
@@ -209,7 +207,7 @@ export default function HeroSection() {
       x: 0,
       opacity: 1,
       transition: {
-        duration: 0.8,
+        duration: 0.4,
         ease: [0.25, 0.46, 0.45, 0.94],
       },
     },
@@ -221,7 +219,7 @@ export default function HeroSection() {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.8,
+        duration: 0.4,
         ease: [0.25, 0.46, 0.45, 0.94],
       },
     },
@@ -284,11 +282,8 @@ export default function HeroSection() {
   return (
     <section
       ref={heroRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50/30"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50/30 pt-16"
     >
-      {/* Custom Cursor */}
-      <CursorFollower />
-
       {/* Particle System */}
       <ParticleSystem />
 
@@ -311,35 +306,6 @@ export default function HeroSection() {
         />
       </div>
 
-      {/* Morphing Background Shapes */}
-      <motion.div
-        className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-br from-blue-400/10 to-purple-400/10 rounded-full blur-xl"
-        animate={{
-          scale: [1, 1.5, 1.2, 1],
-          opacity: [0.3, 0.8, 0.5, 0.3],
-          borderRadius: ["50%", "30%", "50%", "40%"],
-        }}
-        transition={{
-          duration: 12,
-          repeat: Number.POSITIVE_INFINITY,
-          ease: "easeInOut",
-        }}
-      />
-      <motion.div
-        className="absolute bottom-32 right-20 w-40 h-40 bg-gradient-to-br from-purple-400/10 to-pink-400/10 rounded-full blur-xl"
-        animate={{
-          scale: [1.2, 1, 1.5, 1.2],
-          opacity: [0.4, 0.9, 0.6, 0.4],
-          borderRadius: ["40%", "50%", "30%", "50%"],
-        }}
-        transition={{
-          duration: 15,
-          repeat: Number.POSITIVE_INFINITY,
-          ease: "easeInOut",
-          delay: 2,
-        }}
-      />
-
       {/* Enhanced Floating Tech Icons - Hidden on mobile */}
       <div className="hidden md:block">
         {techIcons.map((tech, index) => (
@@ -347,38 +313,9 @@ export default function HeroSection() {
         ))}
       </div>
 
-      {/* Floating Geometric Elements */}
-      <motion.div
-        className="absolute top-40 right-32 w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full opacity-60"
-        animate={{
-          y: [0, -50, 0],
-          x: [0, 25, 0],
-          scale: [1, 1.5, 1],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Number.POSITIVE_INFINITY,
-          ease: "easeInOut",
-        }}
-      />
-      <motion.div
-        className="absolute bottom-40 left-32 w-4 h-4 bg-gradient-to-r from-purple-500 to-pink-500 rotate-45 opacity-50"
-        animate={{
-          y: [0, 40, 0],
-          rotate: [45, 135, 45],
-          scale: [1, 1.3, 1],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Number.POSITIVE_INFINITY,
-          ease: "easeInOut",
-          delay: 1,
-        }}
-      />
-
       {/* Main Content */}
       <motion.div
-        className="relative z-10 text-center px-6 max-w-5xl mx-auto mt-8 md:mt-0"
+        className="relative z-10 text-center px-6 max-w-5xl mx-auto"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -409,7 +346,7 @@ export default function HeroSection() {
             <motion.span
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
             >
               Himanshu
             </motion.span>
@@ -418,7 +355,7 @@ export default function HeroSection() {
               className="font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
+              transition={{ duration: 0.4, delay: 0.2 }}
             >
               Gandhi
             </motion.span>
@@ -426,12 +363,9 @@ export default function HeroSection() {
 
           <motion.div
             variants={slideInRight}
-            className="text-xl md:text-2xl text-slate-600 font-light mb-8 max-w-3xl mx-auto leading-relaxed"
+            className="text-xl md:text-2xl text-slate-600 font-light mb-8 max-w-3xl mx-auto leading-relaxed min-h-[3rem]"
           >
-            <TypewriterText
-              text="Cloud Computing Specialist crafting scalable solutions with AWS & Azure"
-              delay={500}
-            />
+            <MultiLineTypewriter lines={typewriterLines} delay={500} />
           </motion.div>
 
           {/* Enhanced Contact Info */}
@@ -451,7 +385,7 @@ export default function HeroSection() {
                 }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.2 + 1 }}
+                transition={{ delay: index * 0.05 + 0.3 }}
               >
                 <item.icon className="w-4 h-4" style={{ color: item.color }} />
                 <span>{item.text}</span>
@@ -479,16 +413,8 @@ export default function HeroSection() {
               }}
               initial={{ opacity: 0, y: 30, scale: 0.8 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ delay: index * 0.1 + 1.2 }}
+              transition={{ delay: index * 0.03 + 0.4 }}
             >
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-20"
-                style={{
-                  background: `linear-gradient(90deg, ${skill.color}, transparent, ${skill.color})`,
-                }}
-                animate={{ x: ["-100%", "100%"] }}
-                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-              />
               <span className="relative z-10 mr-2">{skill.icon}</span>
               <span className="relative z-10">{skill.name}</span>
             </motion.div>
@@ -544,9 +470,9 @@ export default function HeroSection() {
         {/* Enhanced Quick Links */}
         <motion.div variants={slideInUp} className="flex justify-center space-x-10 mt-16">
           {[
-            { name: "GitHub", url: "https://github.com/himanshu3024" },
-            { name: "LinkedIn", url: "https://www.linkedin.com/in/himanshu-gandhi-891204160/" },
-            { name: "Portfolio", url: "https://yellow-forest-08fad6510.6.azurestaticapps.net/", icon: ExternalLink },
+            { name: "GitHub", url: "https://github.com/himanshu" },
+            { name: "LinkedIn", url: "https://linkedin.com/in/himanshu" },
+            { name: "Portfolio", url: "#", icon: ExternalLink },
           ].map((link, index) => (
             <motion.a
               key={link.name}
@@ -561,7 +487,7 @@ export default function HeroSection() {
               }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 + 1.8 }}
+              transition={{ delay: index * 0.03 + 0.6 }}
             >
               <span>{link.name}</span>
               {link.icon && <link.icon className="w-3 h-3" />}
@@ -582,11 +508,6 @@ export default function HeroSection() {
             className="w-2 h-4 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full mt-2"
             animate={{ y: [0, 16, 0] }}
             transition={{ duration: 2.5, repeat: Number.POSITIVE_INFINITY }}
-          />
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-200 to-transparent opacity-50"
-            animate={{ y: ["-100%", "100%"] }}
-            transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
           />
         </div>
       </motion.div>
