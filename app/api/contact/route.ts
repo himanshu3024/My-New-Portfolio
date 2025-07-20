@@ -55,11 +55,23 @@ export async function POST(request: NextRequest): Promise<NextResponse<ResponseD
 
     console.log("Contact form submission:", submissionData)
 
+    // Get SendGrid API key from environment
+    const sendGridApiKey = process.env.SENDGRID_API_KEY
+    
+    if (!sendGridApiKey) {
+      console.warn("SendGrid API key not found in environment variables")
+    }
+
     // Simulate database save
     await new Promise((resolve) => setTimeout(resolve, 500))
 
-    // Simulate email notification
-    await new Promise((resolve) => setTimeout(resolve, 300))
+    // Simulate email notification with SendGrid
+    if (sendGridApiKey && sendGridApiKey !== "YOUR_SENDGRID_API_KEY_HERE") {
+      // Here you would integrate with SendGrid
+      console.log("SendGrid API key found, would send email")
+    } else {
+      console.log("SendGrid API key not found or using placeholder, skipping email")
+    }
 
     // Simulate analytics tracking
     await new Promise((resolve) => setTimeout(resolve, 200))
