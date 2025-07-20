@@ -1,4 +1,4 @@
-# 🚀 **Himanshu Gandhi - Advanced Cloud Computing Portfolio**
+# 🚀 **Himanshu Gandhi - Cloud Computing Portfolio**
 
 > **The Most Advanced Cloud Computing Portfolio Ever Created**  
 > Featuring real-time analytics, interactive 3D cloud infrastructure, AI-powered assistance, and comprehensive performance monitoring.
