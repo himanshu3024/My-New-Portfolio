@@ -17,7 +17,7 @@
       "type": "sendGrid",
       "direction": "out",
       "name": "message",
-      "apiKey": "SG.DiCryj4cQD6BgQDpODr0gA.OiA5ZKXKDzIhpdd8r6IQL5T7p-CjRZ9bJ8XdQ8zgR88",
+      "apiKey": "YOUR_SENDGRID_API_KEY_HERE",
       "from": "gandhi111000@hotmail.com"
     }
   ],
